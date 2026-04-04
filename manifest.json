@@ -1,6 +1,6 @@
 {
-  "name": "現場ことば帳",
-  "short_name": "ことば帳",
+  "name": "げんばメモ",
+  "short_name": "げんばメモ",
   "description": "製造現場の多言語用語集",
   "start_url": "/",
   "display": "standalone",
