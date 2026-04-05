@@ -259,11 +259,11 @@ const TERMS = {
   ]},
 
   "体調・病院": { color:"#f43f5e", emoji:"🏥", group:"生活・会話", items:[
-    {ja:"醭が痛い",yomi:"あたまがいたい",vi:"Đau đầu",vi_k:"ダウ・ダウ",id:"Sakit kepala",id_k:"サキット・クパラ",en:"Headache",en_k:"ヘッドエイク",bn:"মাথা ব্যথা",bn_k:"マタ・ビャタ"},
+    {ja:"頭が痛い",yomi:"あたまがいたい",vi:"Đau đầu",vi_k:"ダウ・ダウ",id:"Sakit kepala",id_k:"サキット・クパラ",en:"Headache",en_k:"ヘッドエイク",bn:"মাথা ব্যথা",bn_k:"マタ・ビャタ"},
     {ja:"お腹が痛い",yomi:"おなかがいたい",vi:"Đau bụng",vi_k:"ダウ・ブン",id:"Sakit perut",id_k:"サキット・プルット",en:"Stomachache",en_k:"ストマックエイク",bn:"পেট ব্যথা",bn_k:"ペット・ビャタ"},
     {ja:"熱がある",yomi:"ねつがある",vi:"Có sốt",vi_k:"コ・ソット",id:"Demam",id_k:"ドゥマム",en:"Have a fever",en_k:"ハブ・ア・フィーバー",bn:"জ্বর আছে",bn_k:"ジョル・アチェ"},
     {ja:"吐き気がする",yomi:"はきけがする",vi:"Buồn nôn",vi_k:"ブオン・ノン",id:"Mual",id_k:"ムアル",en:"Feel nauseous",en_k:"フィール・ノーシャス",bn:"বমি বমি ভাব",bn_k:"ボミ・ボミ"},
-    {ja:"ぁまいがする",yomi:"めまいがする",vi:"Chóng mặt",vi_k:"チョン・マット",id:"Pusing",id_k:"プシン",en:"Feel dizzy",en_k:"フィール・ディジー",bn:"মাথা ঘোরা",bn_k:"マタ・ゴラ"},
+    {ja:"めまいがする",yomi:"めまいがする",vi:"Chóng mặt",vi_k:"チョン・マット",id:"Pusing",id_k:"プシン",en:"Feel dizzy",en_k:"フィール・ディジー",bn:"মাথা ঘোরা",bn_k:"マタ・ゴラ"},
     {ja:"体調が悪い",yomi:"たいちょうがわるい",vi:"Không khỏe",vi_k:"コン・コエ",id:"Tidak sehat",id_k:"ティダック・スハット",en:"I feel sick",en_k:"アイ・フィール・シック",bn:"অসুস্থ",bn_k:"オシュストー"},
     {ja:"咳が出る",yomi:"せきがでる",vi:"Ho",vi_k:"ホー",id:"Batuk",id_k:"バトゥック",en:"Coughing",en_k:"コーフィング",bn:"কাশি",bn_k:"カシ"},
     {ja:"病院に行く",yomi:"びょういんにいく",vi:"Đi bệnh viện",vi_k:"ディ・ベン・ビエン",id:"Pergi ke rumah sakit",id_k:"プルギ・クルマ",en:"Go to hospital",en_k:"ゴー・トゥ・ホスピタル",bn:"হাসপাতালে যাওয়া",bn_k:"ハシュパタレ・ジャওয়া"},
