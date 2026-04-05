@@ -209,8 +209,6 @@ const TERMS = {
     {ja:"足場",yomi:"あしば",vi:"Giàn giáo",vi_k:"ジャン・ジャオ",id:"Perancah",id_k:"プランチャ",en:"Scaffolding",en_k:"スキャフォールディング",bn:"মাচা",bn_k:"マチャ"},
     {ja:"安全帯",yomi:"あんぜんたい",vi:"Dây an toàn",vi_k:"ザイ・アン・トアン",id:"Sabuk pengaman",id_k:"サブック",en:"Safety harness",en_k:"セーフティ・ハーネス",bn:"সেফটি হার্নেস",bn_k:"セーフティ"},
     {ja:"養生",yomi:"ようじょう",vi:"Che phủ bảo vệ",vi_k:"チェ・フー",id:"Penutup pelindung",id_k:"プリンドゥン",en:"Protection",en_k:"プロテクション",bn:"সুরক্ষা আবরণ",bn_k:"スロクシャ"},
-    {ja:"Bedsore",en_k:"ベッドソア",bn:"শয্যাক্ষত",bn_k:"ショイジャ"},
-    {ja:"バイタル",yomi:"ばいたる",vi:"Dấu hiệu sinh tồn",vi_k:"ザウ・ヒウ",id:"Tanda vital",id_k:"タンダ・ビタル",en:"Vital signs",en_k:"バイタル・サインズ",bn:"ভাইটাল সাইন",bn_k:"バイタル"}
   ]},
 
   /* ══════════════════════════════════
@@ -233,11 +231,11 @@ const TERMS = {
   ]},
 
   "体調・病院": { color:"#f43f5e", emoji:"🏥", group:"生活・会話", items:[
-    {ja:"醭が痛い",yomi:"あたまがいたい",vi:"Đau đầu",vi_k:"ダウ・ダウ",id:"Sakit kepala",id_k:"サキット・クパラ",en:"Headache",en_k:"ヘッドエイク",bn:"মাথা ব্যথা",bn_k:"マタ・ビャタ"},
+    {ja:"頭が痛い",yomi:"あたまがいたい",vi:"Đau đầu",vi_k:"ダウ・ダウ",id:"Sakit kepala",id_k:"サキット・クパラ",en:"Headache",en_k:"ヘッドエイク",bn:"মাথা ব্যথা",bn_k:"マタ・ビャタ"},
     {ja:"お腹が痛い",yomi:"おなかがいたい",vi:"Đau bụng",vi_k:"ダウ・ブン",id:"Sakit perut",id_k:"サキット・プルット",en:"Stomachache",en_k:"ストマックエイク",bn:"পেট ব্যথা",bn_k:"ペット・ビャタ"},
     {ja:"熱がある",yomi:"ねつがある",vi:"Có sốt",vi_k:"コ・ソット",id:"Demam",id_k:"ドゥマム",en:"Have a fever",en_k:"ハブ・ア・フィーバー",bn:"জ্বর আছে",bn_k:"ジョル・アチェ"},
     {ja:"吐き気がする",yomi:"はきけがする",vi:"Buồn nôn",vi_k:"ブオン・ノン",id:"Mual",id_k:"ムアル",en:"Feel nauseous",en_k:"フィール・ノーシャス",bn:"বমি বমি ভাব",bn_k:"ボミ・ボミ"},
-    {ja:"ぁまいがする",yomi:"めまいがする",vi:"Chóng mặt",vi_k:"チョン・マット",id:"Pusing",id_k:"プシン",en:"Feel dizzy",en_k:"フィール・ディジー",bn:"Bedsore",en_k:"ベッドソア",bn:"শয্যাক্ষত",bn_k:"ショイジャ"},
+    {ja:"めまいがする",yomi:"めまいがする",vi:"Chóng mặt",vi_k:"チョン・マット",id:"Pusing",id_k:"プシン",en:"Feel dizzy",en_k:"フィール・ディジー",bn:"মাথা ঘুরছে",bn_k:"マタ・グルチェ"},
     {ja:"バイタル",yomi:"ばいたる",vi:"Dấu hiệu sinh tồn",vi_k:"ザウ・ヒウ",id:"Tanda vital",id_k:"タンダ・ビタル",en:"Vital signs",en_k:"バイタル・サインズ",bn:"ভাইটাল সাইন",bn_k:"バイタル"}
   ]},
 
@@ -273,6 +271,7 @@ const TERMS = {
     {ja:"アレルギー",yomi:"あれるぎー",vi:"Dị ứng",vi_k:"ジ・ウン",id:"Alergi",id_k:"アレルギ",en:"Allergy",en_k:"アレルジー",bn:"অ্যালার্জি",bn_k:"アレルジー"},
     {ja:"血が出ている",yomi:"ちがでている",vi:"Đang chảy máu",vi_k:"ダン・チャイ・マウ",id:"Berdarah",id_k:"ブルダラ",en:"Bleeding",en_k:"ブリーディング",bn:"রক্ত পড়ছে",bn_k:"ロクト・ポルチェ"},
     {ja:"救急車を呼ぶ",yomi:"きゅうきゅうしゃをよぶ",vi:"Gọi xe cấp cứu",vi_k:"ゴイ・セー・カップ",id:"Panggil ambulans",id_k:"パンギル・アンブランス",en:"Call an ambulance",en_k:"コール・アン・アンビュランス",bn:"অ্যাম্বুলেন্স ডাকুন",bn_k:"アンブレンス・ダクン"},
+    {ja:"バイタル",yomi:"ばいたる",vi:"Dấu hiệu sinh tồn",vi_k:"ザウ・ヒウ",id:"Tanda vital",id_k:"タンダ・ビタル",en:"Vital signs",en_k:"バイタル・サインズ",bn:"ভাইটাল সাইন",bn_k:"バイタル"},
     {ja:"休んでください",yomi:"やすんでください",vi:"Hãy nghỉ ngơi",vi_k:"ハイ・ンギー・ンゴイ",id:"Tolong istirahat",id_k:"トロン・イスティラハット",en:"Please rest",en_k:"プリーズ・レスト",bn:"বিশ্রাম নিন",bn_k:"ビシュラム・ニン"}
   ]}
 
