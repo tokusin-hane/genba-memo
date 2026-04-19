@@ -1,107 +1,473 @@
 <!DOCTYPE html>
-
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#ffffff">
-<title>げんばメモ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1db87d">
+<title>トクシンメモ | Tokushin Group</title>
 <link rel="manifest" href="manifest.json">
 <style>
-:root{--bg:#f5f7fa;--white:#ffffff;--text:#1a1a2e;--muted:#888;--border:#e8ecf0;--shadow:0 2px 8px rgba(0,0,0,0.08);--accent:#2563eb}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:'Hiragino Sans','Noto Sans JP','Yu Gothic',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:480px;margin:0 auto}
-.header{background:var(--white);padding:16px 20px 0;position:sticky;top:0;z-index:100;box-shadow:0 1px 0 var(--border)}
-.header-top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.header-icon{width:36px;height:36px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
-.header-title{font-size:20px;font-weight:800}
-.header-title span{color:var(--accent)}
-.header-right{display:flex;align-items:center;gap:10px;margin-left:auto}
-.search-icon-btn{background:none;border:none;font-size:20px;cursor:pointer;padding:4px;color:var(--muted)}
-.lang-bar{display:flex;border-bottom:2px solid var(--border);overflow-x:auto;scrollbar-width:none}
-.lang-bar::-webkit-scrollbar{display:none}
-.lang-btn{flex-shrink:0;padding:10px 14px;border:none;background:transparent;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all 0.2s;white-space:nowrap}
-.lang-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
-#searchArea{display:none;padding:10px 16px;background:var(--white);border-bottom:1px solid var(--border)}
-.search-box{display:flex;align-items:center;background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:0 14px;gap:8px}
-.search-box:focus-within{border-color:var(--accent)}
-.search-input{flex:1;padding:11px 0;border:none;background:transparent;font-size:15px;color:var(--text);outline:none}
-.search-input::placeholder{color:var(--muted)}
-.group-bar{display:flex;gap:6px;padding:10px 14px;overflow-x:auto;scrollbar-width:none;background:#f0f4ff;border-bottom:1px solid var(--border)}
-.group-bar::-webkit-scrollbar{display:none}
-.group-btn{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 14px;border-radius:12px;border:2px solid transparent;background:var(--white);cursor:pointer;transition:all 0.15s;min-width:58px;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
-.group-btn .g-icon{font-size:18px;line-height:1}
-.group-btn .g-label{font-size:11px;font-weight:700;color:var(--muted);white-space:nowrap}
-.group-btn.active{background:var(--accent);border-color:var(--accent)}
-.group-btn.active .g-label{color:white}
-.cat-bar{display:flex;gap:8px;padding:10px 14px;overflow-x:auto;scrollbar-width:none;background:var(--white);border-bottom:1px solid var(--border)}
-.cat-bar::-webkit-scrollbar{display:none}
-.cat-btn{flex-shrink:0;padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--white);font-size:12px;font-weight:700;cursor:pointer;color:var(--muted);transition:all 0.15s;white-space:nowrap}
-.cat-btn.active{color:white;background:var(--accent);border-color:var(--accent)}
-.term-list{padding:12px 16px 80px}
-.cat-header{display:flex;align-items:center;gap:8px;padding:12px 10px 8px;font-size:12px;font-weight:800;color:white;border-radius:10px;margin-bottom:6px;margin-top:10px}
-.cat-header:first-child{margin-top:0}
-.term-card{background:var(--white);border-radius:14px;padding:14px 16px;margin-bottom:8px;cursor:pointer;border:1.5px solid var(--border);box-shadow:var(--shadow);transition:all 0.15s;display:flex;gap:12px;align-items:center}
-.term-card:active{transform:scale(0.98);box-shadow:none}
-.term-ja{font-size:18px;font-weight:800;flex:1}
-.term-yomi{font-size:11px;color:var(--muted);display:block;margin-top:1px}
-.term-trans{font-size:13px;color:#444;font-weight:500;margin-top:4px}
-.term-kana{font-size:11px;color:var(--muted)}
-.term-info{flex:1;min-width:0}
-.term-arrow{color:var(--muted);font-size:18px;flex-shrink:0}
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;align-items:flex-end;justify-content:center}
-.modal-overlay.show{display:flex}
-.modal{background:var(--white);border-radius:24px 24px 0 0;padding:8px 24px 48px;width:100%;max-width:480px;animation:slideUp 0.25s cubic-bezier(0.34,1.56,0.64,1);max-height:85vh;overflow-y:auto}
-@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.modal-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:12px auto 20px}
-.modal-badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;color:white;margin-bottom:8px}
-.modal-ja{font-size:34px;font-weight:900;margin-bottom:4px;line-height:1.2}
-.modal-yomi{font-size:13px;color:var(--muted);margin-bottom:24px}
-.modal-lang-card{background:var(--bg);border-radius:14px;padding:14px 16px;margin-bottom:10px;display:flex;gap:14px;align-items:center;border:1.5px solid var(--border)}
-.modal-flag{font-size:28px;flex-shrink:0}
-.modal-lang-name{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:3px}
-.modal-lang-text{font-size:20px;font-weight:700;line-height:1.3}
-.modal-lang-kana{font-size:12px;color:var(--muted);margin-top:2px}
-.empty{text-align:center;padding:60px 20px;color:var(--muted)}
-.empty-icon{font-size:48px;margin-bottom:12px}
-.offline-bar{display:none;position:fixed;bottom:0;left:0;right:0;background:#f59e0b;color:white;text-align:center;padding:10px;font-size:13px;font-weight:700;z-index:300}
-.offline-bar.show{display:block}
+:root {
+  --green: #1db87d; --green-dark: #0f6e56; --green-light: #e8f7ef;
+  --red: #E24B4A; --amber: #BA7517;
+  --gray: #f4f4f4; --text: #1a1a1a; --text-muted: #666;
+  --radius: 14px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans JP','Hiragino Sans',sans-serif; background: var(--gray); color: var(--text); min-height: 100vh; }
+
+/* ヘッダー */
+header { background: var(--green); padding: 14px 16px 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+.header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.logo-text { color: #fff; font-size: 20px; font-weight: 700; }
+.logo-sub { color: rgba(255,255,255,0.8); font-size: 10px; }
+.lang-row { display: flex; gap: 5px; overflow-x: auto; scrollbar-width: none; }
+.lang-row::-webkit-scrollbar { display: none; }
+.lb { background: rgba(255,255,255,0.2); border: 1.5px solid rgba(255,255,255,0.4); color: #fff; border-radius: 20px; padding: 5px 14px; font-size: 12px; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+.lb.on { background: #fff; color: var(--green); border-color: #fff; }
+
+main { max-width: 600px; margin: 0 auto; padding: 16px; }
+
+/* トップ：困りごとセクション */
+.trouble-section { background: #fff; border-radius: var(--radius); padding: 16px; margin-bottom: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.trouble-heading { font-size: 26px; font-weight: 700; color: var(--green-dark); margin-bottom: 16px; text-align: center; letter-spacing: -0.5px; }
+.trouble-grid { display: flex; flex-direction: column; gap: 8px; }
+.trouble-btn { display: flex; align-items: center; gap: 14px; background: var(--green-light); border: 2px solid var(--green); border-radius: var(--radius); padding: 14px 16px; cursor: pointer; transition: all 0.15s; width: 100%; }
+.trouble-btn:hover, .trouble-btn:active { background: var(--green); }
+.trouble-btn:hover .trouble-label, .trouble-btn:active .trouble-label { color: #fff; }
+.trouble-btn:hover .trouble-sub, .trouble-btn:active .trouble-sub { color: rgba(255,255,255,0.8); }
+.trouble-btn:hover .trouble-arrow, .trouble-btn:active .trouble-arrow { color: #fff; }
+.trouble-icon { font-size: 26px; flex-shrink: 0; width: 36px; text-align: center; }
+.trouble-text { flex: 1; text-align: left; }
+.trouble-label { font-size: 16px; font-weight: 700; color: var(--green-dark); }
+.trouble-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.trouble-arrow { font-size: 20px; color: var(--green-dark); flex-shrink: 0; }
+
+/* メニューセクション */
+.menu-section { margin-bottom: 14px; }
+.menu-heading { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; padding-left: 4px; font-weight: 500; }
+.menu-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.menu-btn { background: #fff; border: 1px solid #e0e0e0; border-radius: 12px; padding: 12px 6px; text-align: center; cursor: pointer; transition: all 0.15s; }
+.menu-btn:hover, .menu-btn:active { background: var(--green-light); border-color: var(--green); }
+.menu-icon { font-size: 22px; margin-bottom: 4px; }
+.menu-btn-label { font-size: 11px; font-weight: 600; color: var(--text); }
+
+/* フロー詳細 */
+.flow-back { display: flex; align-items: center; gap: 6px; background: #fff; border: 1px solid #eee; border-radius: 20px; padding: 7px 16px; font-size: 13px; cursor: pointer; margin-bottom: 14px; width: fit-content; color: var(--text-muted); }
+.flow-title-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.flow-title-icon { font-size: 28px; }
+.flow-title-text { font-size: 18px; font-weight: 700; }
+.step-card { background: #fff; border-radius: var(--radius); border: 1px solid #eee; margin-bottom: 10px; overflow: hidden; }
+.step-header { display: flex; align-items: center; gap: 10px; padding: 13px 14px; }
+.step-no { width: 30px; height: 30px; background: var(--green); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+.step-action { font-size: 14px; font-weight: 600; }
+.step-show { margin: 0 14px 14px; background: #f0faf5; border: 1.5px solid var(--green); border-radius: 12px; padding: 18px; text-align: center; cursor: pointer; }
+.step-show:active { background: var(--green-light); }
+.step-show-jp { font-size: 22px; font-weight: 700; line-height: 1.5; white-space: pre-line; margin-bottom: 8px; }
+.step-show-tr { font-size: 13px; color: var(--text-muted); white-space: pre-line; line-height: 1.5; }
+.step-show-hint { font-size: 11px; color: var(--green-dark); margin-top: 8px; background: rgba(29,184,125,0.1); border-radius: 6px; padding: 4px 8px; display: inline-block; }
+.step-options { padding: 0 14px 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.step-opt { background: #fff; border: 1.5px solid #ddd; border-radius: 10px; padding: 12px 8px; cursor: pointer; text-align: center; transition: all 0.15s; }
+.step-opt:active { background: var(--green-light); border-color: var(--green); }
+.opt-jp { font-size: 13px; font-weight: 700; white-space: pre-line; line-height: 1.4; }
+.opt-tr { font-size: 11px; color: var(--text-muted); margin-top: 4px; white-space: pre-line; line-height: 1.3; }
+
+/* ブロック共通 */
+.block { background: #fff; border-radius: var(--radius); box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 10px; overflow: hidden; border: 1px solid #eee; }
+.block-header { display: flex; align-items: center; gap: 10px; padding: 14px; cursor: pointer; }
+.block-icon { font-size: 20px; width: 38px; height: 38px; background: var(--green-light); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.block-title { font-size: 15px; font-weight: 600; flex: 1; }
+.block-arrow { font-size: 20px; color: var(--text-muted); transition: transform 0.2s; }
+.block.open .block-arrow { transform: rotate(90deg); color: var(--green); }
+.block-body { display: none; border-top: 1px solid #f0f0f0; }
+.block.open .block-body { display: block; }
+.sub-label { font-size: 11px; color: var(--text-muted); padding: 10px 14px 6px; font-weight: 500; }
+.btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 12px 12px; }
+.btn-grid.wide { grid-template-columns: 1fr; }
+.phrase-btn { background: #fff; border: 1.5px solid #e0e0e0; border-radius: 10px; padding: 13px 10px; cursor: pointer; text-align: center; min-height: 68px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.phrase-btn:active { background: var(--green-light); }
+.phrase-btn.red { border-left: 3px solid var(--red); }
+.phrase-btn.amber { border-left: 3px solid var(--amber); }
+.phrase-btn.green { border-left: 3px solid var(--green); }
+.btn-jp { font-size: 13px; font-weight: 700; white-space: pre-line; line-height: 1.4; }
+.btn-tr { font-size: 11px; color: var(--text-muted); margin-top: 4px; white-space: pre-line; line-height: 1.3; }
+
+/* 現場メモ */
+.genba-items { padding: 8px 12px 12px; display: flex; flex-direction: column; gap: 4px; }
+.genba-item { display: flex; align-items: center; gap: 12px; background: #fafafa; border: 1px solid #eee; border-radius: 10px; padding: 10px 12px; cursor: pointer; }
+.genba-item:active { background: var(--green-light); }
+.genba-jp { font-size: 15px; font-weight: 700; min-width: 80px; }
+.genba-kana { font-size: 10px; color: var(--text-muted); min-width: 80px; }
+.genba-tr { font-size: 12px; color: var(--green-dark); flex: 1; }
+
+/* カードアイテム */
+.card-items { padding: 0 14px 12px; }
+.card-item { padding: 11px 0; border-bottom: 1px solid #f5f5f5; }
+.card-item:last-child { border-bottom: none; }
+.item-jp { font-size: 14px; font-weight: 600; white-space: pre-line; line-height: 1.5; }
+.item-tr { font-size: 12px; color: var(--green-dark); margin-top: 4px; white-space: pre-line; line-height: 1.4; }
+
+/* ポップアップ */
+.overlay-wrap { position: fixed; inset: 0; background: rgba(0,0,0,0.65); display: none; align-items: center; justify-content: center; z-index: 200; padding: 20px; }
+.overlay-wrap.show { display: flex; }
+.popup { background: #fff; border-radius: 20px; padding: 36px 28px; width: 100%; max-width: 380px; text-align: center; }
+.popup-jp { font-size: 28px; font-weight: 700; line-height: 1.4; margin-bottom: 14px; white-space: pre-line; }
+.popup-tr { font-size: 15px; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; white-space: pre-line; }
+.popup-hint { font-size: 11px; color: var(--green-dark); margin-bottom: 20px; }
+.popup-close { background: var(--green); color: #fff; border: none; border-radius: 24px; padding: 13px 40px; font-size: 15px; cursor: pointer; width: 100%; font-weight: 600; }
+
+footer { text-align: center; padding: 20px 16px 32px; font-size: 11px; color: #aaa; }
+.offline-badge { display: inline-flex; align-items: center; gap: 5px; background: #fff; border: 1px solid #e0e0e0; border-radius: 20px; padding: 5px 12px; font-size: 11px; color: var(--text-muted); margin-bottom: 6px; }
+.offline-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; }
 </style>
 </head>
 <body>
-<div class="header">
+
+<header>
   <div class="header-top">
-    <div class="header-icon" style="background:white;padding:4px">
-      <img src="https://tokusin.jp/jpwp/wp-content/themes/tokushin_group_v1806/images/logo_trust.svg" style="height:26px;width:26px;object-fit:contain">
-    </div>
-    <div class="header-title">げんば<span>メモ</span></div>
-    <div class="header-right">
-      <button class="search-icon-btn" id="searchToggle">🔍</button>
+    <div>
+      <div class="logo-text">トクシンメモ</div>
+      <div class="logo-sub">困ったときに、すぐ使えます</div>
     </div>
   </div>
-  <div class="lang-bar" id="langBar"></div>
-</div>
-<div id="searchArea">
-  <div class="search-box">
-    <span style="color:#888;font-size:16px">🔍</span>
-    <input class="search-input" type="search" placeholder="用語を検索..." id="searchBox">
+  <div class="lang-row">
+    <button class="lb on" data-l="ja">日本語</button>
+    <button class="lb" data-l="vi">Tiếng Việt</button>
+    <button class="lb" data-l="id">Indonesia</button>
+    <button class="lb" data-l="en">English</button>
+    <button class="lb" data-l="bn">বাংলা</button>
+  </div>
+</header>
+
+<div class="overlay-wrap" id="overlay">
+  <div class="popup">
+    <div class="popup-jp" id="pop-jp"></div>
+    <div class="popup-tr" id="pop-tr"></div>
+    <div class="popup-hint" id="pop-hint">← 画面を見せてください / Show this screen</div>
+    <button class="popup-close" onclick="closePopup()">閉じる / Close</button>
   </div>
 </div>
-<div class="group-bar" id="groupBar"></div>
-<div class="cat-bar" id="catBar"></div>
-<div class="term-list" id="termList"></div>
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <div class="modal-badge" id="modalBadge"></div>
-    <div class="modal-ja" id="modalJa"></div>
-    <div class="modal-yomi" id="modalYomi"></div>
-    <div id="modalLangs"></div>
+
+<main>
+  <div id="top-screen">
+    <div class="trouble-section">
+      <div class="trouble-heading" id="trouble-heading">いま何に困っていますか？</div>
+      <div class="trouble-grid">
+        <button class="trouble-btn" onclick="showFlow('late')">
+          <div class="trouble-icon">⏰</div>
+          <div class="trouble-text">
+            <div class="trouble-label" id="tl-late">遅れそう</div>
+            <div class="trouble-sub" id="ts-late">電話して伝える手順を見る</div>
+          </div>
+          <div class="trouble-arrow">›</div>
+        </button>
+        <button class="trouble-btn" onclick="showFlow('sick')">
+          <div class="trouble-icon">🤒</div>
+          <div class="trouble-text">
+            <div class="trouble-label" id="tl-sick">体調が悪い・休みたい</div>
+            <div class="trouble-sub" id="ts-sick">休む連絡の手順を見る</div>
+          </div>
+          <div class="trouble-arrow">›</div>
+        </button>
+        <button class="trouble-btn" onclick="showFlow('work_trouble')">
+          <div class="trouble-icon">🔧</div>
+          <div class="trouble-text">
+            <div class="trouble-label" id="tl-work">仕事でわからない・困った</div>
+            <div class="trouble-sub" id="ts-work">担当者に伝えるフレーズ</div>
+          </div>
+          <div class="trouble-arrow">›</div>
+        </button>
+        <button class="trouble-btn" onclick="showFlow('garbage')">
+          <div class="trouble-icon">🗑️</div>
+          <div class="trouble-text">
+            <div class="trouble-label" id="tl-garbage">ゴミを出したい</div>
+            <div class="trouble-sub" id="ts-garbage">分別と出し方の手順を見る</div>
+          </div>
+          <div class="trouble-arrow">›</div>
+        </button>
+        <button class="trouble-btn" onclick="showFlow('hospital_flow')">
+          <div class="trouble-icon">🏥</div>
+          <div class="trouble-text">
+            <div class="trouble-label" id="tl-hospital">病院に行きたい</div>
+            <div class="trouble-sub" id="ts-hospital">受付・症状の伝え方を見る</div>
+          </div>
+          <div class="trouble-arrow">›</div>
+        </button>
+      </div>
+    </div>
+
+    <div class="menu-section">
+      <div class="menu-heading" id="menu-heading">よく使うメニュー</div>
+      <div class="menu-grid">
+        <button class="menu-btn" onclick="showMenu('emergency')">
+          <div class="menu-icon">🚨</div>
+          <div class="menu-btn-label" id="ml-emergency">緊急</div>
+        </button>
+        <button class="menu-btn" onclick="showGenba()">
+          <div class="menu-icon">🏭</div>
+          <div class="menu-btn-label" id="ml-genba">現場メモ</div>
+        </button>
+        <button class="menu-btn" onclick="showMenu('hospital')">
+          <div class="menu-icon">🏥</div>
+          <div class="menu-btn-label" id="ml-hospital">病院</div>
+        </button>
+        <button class="menu-btn" onclick="showMenu('work')">
+          <div class="menu-icon">📞</div>
+          <div class="menu-btn-label" id="ml-work">職場連絡</div>
+        </button>
+        <button class="menu-btn" onclick="showMenu('life')">
+          <div class="menu-icon">🏠</div>
+          <div class="menu-btn-label" id="ml-life">生活</div>
+        </button>
+        <button class="menu-btn" onclick="showMenu('rules')">
+          <div class="menu-icon">📋</div>
+          <div class="menu-btn-label" id="ml-rules">ルール</div>
+        </button>
+        <button class="menu-btn" onclick="showMenu('custom')">
+          <div class="menu-icon">⚙️</div>
+          <div class="menu-btn-label" id="ml-custom">会社ルール</div>
+        </button>
+        <button class="menu-btn" onclick="showMenu('religion')">
+          <div class="menu-icon">🍱</div>
+          <div class="menu-btn-label" id="ml-religion">食事・宗教</div>
+        </button>
+        <button class="menu-btn" onclick="showMenu('all')">
+          <div class="menu-icon">📂</div>
+          <div class="menu-btn-label" id="ml-all">すべて</div>
+        </button>
+      </div>
+    </div>
   </div>
-</div>
-<div class="offline-bar" id="offlineBar">📴 オフライン動作中</div>
+
+  <div id="content" style="display:none;"></div>
+</main>
+
+<footer>
+  <div class="offline-badge">
+    <span class="offline-dot"></span>
+    <span>オフライン対応 / Offline available</span>
+  </div>
+  <p>© Tokushin Group | トクシンメモ v1.0</p>
+</footer>
+
 <script src="data.js"></script>
-<script src="app.js"></script>
+<script>
+let lang = 'ja';
+let currentFlow = null;
+let currentMenu = null;
+
+const LABELS = {
+  trouble_heading: { ja: 'いま何に困っていますか？', vi: 'Bạn đang gặp khó khăn gì?', id: 'Apa yang sedang Anda alami?', en: 'What do you need help with?', bn: 'এখন কী সমস্যায় পড়েছেন?' },
+  menu_heading: { ja: 'よく使うメニュー', vi: 'Menu thường dùng', id: 'Menu yang sering digunakan', en: 'Frequently used', bn: 'প্রায়ই ব্যবহৃত মেনু' },
+  tl_late: { ja: '遅れそう', vi: 'Sắp đi muộn', id: 'Akan terlambat', en: 'Going to be late', bn: 'দেরি হবে' },
+  ts_late: { ja: '電話して伝える手順を見る', vi: 'Xem các bước để thông báo', id: 'Lihat langkah-langkah', en: 'See steps to notify', bn: 'ফোন করে জানানোর ধাপ দেখুন' },
+  tl_sick: { ja: '体調が悪い・休みたい', vi: 'Không khỏe / Muốn nghỉ', id: 'Tidak enak badan / Ingin absen', en: 'Feel sick / Want day off', bn: 'অসুস্থ / ছুটি নিতে চাই' },
+  ts_sick: { ja: '休む連絡の手順を見る', vi: 'Xem các bước xin nghỉ', id: 'Lihat langkah izin absen', en: 'See steps to call in sick', bn: 'ছুটির বিজ্ঞপ্তির ধাপ দেখুন' },
+  tl_work: { ja: '仕事でわからない・困った', vi: 'Không hiểu / Gặp khó khăn', id: 'Tidak mengerti / Ada masalah', en: "Don't understand / Trouble", bn: 'কাজে বুঝছি না / সমস্যা' },
+  ts_work: { ja: '担当者に伝えるフレーズ', vi: 'Cụm từ để nói với người phụ trách', id: 'Frasa untuk penanggung jawab', en: 'Phrases to tell your supervisor', bn: 'দায়িত্বশীলকে বলার বাক্য' },
+  tl_garbage: { ja: 'ゴミを出したい', vi: 'Muốn đổ rác', id: 'Ingin membuang sampah', en: 'Want to take out garbage', bn: 'ময়লা ফেলতে চাই' },
+  ts_garbage: { ja: '分別と出し方の手順を見る', vi: 'Xem cách phân loại và đổ rác', id: 'Lihat cara memilah dan membuang', en: 'See how to sort and take out', bn: 'বাছাই ও ফেলার ধাপ দেখুন' },
+  tl_hospital: { ja: '病院に行きたい', vi: 'Muốn đi bệnh viện', id: 'Ingin pergi ke rumah sakit', en: 'Want to go to hospital', bn: 'হাসপাতালে যেতে চাই' },
+  ts_hospital: { ja: '受付・症状の伝え方を見る', vi: 'Xem cách đến khám và trình bày triệu chứng', id: 'Lihat cara mendaftar dan menyampaikan gejala', en: 'See how to register and describe symptoms', bn: 'নিবন্ধন ও উপসর্গ বলার ধাপ দেখুন' },
+  ml_emergency: { ja: '緊急', vi: 'Khẩn cấp', id: 'Darurat', en: 'Emergency', bn: 'জরুরি' },
+  ml_genba: { ja: '現場メモ', vi: 'Ghi chú hiện trường', id: 'Catatan lapangan', en: 'Field Notes', bn: 'ফিল্ড নোট' },
+  ml_hospital: { ja: '病院', vi: 'Bệnh viện', id: 'Rumah sakit', en: 'Hospital', bn: 'হাসপাতাল' },
+  ml_work: { ja: '職場連絡', vi: 'Liên lạc nơi làm việc', id: 'Kontak tempat kerja', en: 'Work contact', bn: 'কাজের যোগাযোগ' },
+  ml_life: { ja: '生活', vi: 'Cuộc sống', id: 'Kehidupan', en: 'Daily life', bn: 'দৈনন্দিন জীবন' },
+  ml_rules: { ja: 'ルール', vi: 'Quy tắc', id: 'Aturan', en: 'Rules', bn: 'নিয়ম' },
+  ml_custom: { ja: '会社ルール', vi: 'Nội quy công ty', id: 'Aturan perusahaan', en: 'Company rules', bn: 'কোম্পানির নিয়ম' },
+  ml_religion: { ja: '食事・宗教', vi: 'Ăn uống / Tôn giáo', id: 'Makan / Agama', en: 'Diet / Religion', bn: 'খাদ্য / ধর্ম' },
+  ml_religion: { ja: '食事・宗教', vi: 'Ăn uống / Tôn giáo', id: 'Makan / Agama', en: 'Diet / Religion', bn: 'খাদ্য / ধর্ম' },
+  ml_all: { ja: 'すべて', vi: 'Tất cả', id: 'Semua', en: 'All', bn: 'সব' },
+  back: { ja: '‹ 戻る', vi: '‹ Quay lại', id: '‹ Kembali', en: '‹ Back', bn: '‹ ফিরে যান' },
+  show_screen: { ja: '← 画面を見せてください', vi: '← Cho xem màn hình này', id: '← Tunjukkan layar ini', en: '← Show this screen', bn: '← এই স্ক্রিন দেখান' },
+  genba_title: { ja: '現場メモ', vi: 'Ghi chú hiện trường', id: 'Catatan lapangan', en: 'Field Notes', bn: 'ফিল্ড নোট' },
+};
+
+function g(obj) { if (!obj) return ''; return obj[lang] || obj['ja'] || ''; }
+function L(key) { return LABELS[key] ? (LABELS[key][lang] || LABELS[key]['ja']) : ''; }
+
+function updateLabels() {
+  const ids = ['trouble_heading','menu_heading','tl_late','ts_late','tl_sick','ts_sick','tl_work','ts_work','tl_garbage','ts_garbage','tl_hospital','ts_hospital','ml_emergency','ml_genba','ml_hospital','ml_work','ml_life','ml_rules','ml_custom','ml_all'];
+  ids.forEach(k => {
+    const el = document.getElementById(k.replace('_','-').replace('tl-','tl-').replace('ts-','ts-').replace('ml-','ml-'));
+    const el2 = document.getElementById(k);
+    const target = el || el2;
+    if (target) target.textContent = L(k);
+  });
+}
+
+function showPopup(jp, trObj) {
+  document.getElementById('pop-jp').textContent = jp;
+  document.getElementById('pop-tr').textContent = (trObj && trObj[lang]) ? trObj[lang] : (trObj && trObj['en'] ? trObj['en'] : '');
+  document.getElementById('overlay').classList.add('show');
+}
+function closePopup() { document.getElementById('overlay').classList.remove('show'); }
+document.getElementById('overlay').addEventListener('click', function(e) { if (e.target === this) closePopup(); });
+
+function showTop() {
+  currentFlow = null; currentMenu = null;
+  document.getElementById('top-screen').style.display = 'block';
+  document.getElementById('content').style.display = 'none';
+}
+
+function showFlow(flowId) {
+  currentFlow = DATA.flow.find(f => f.id === flowId);
+  if (!currentFlow) return;
+  document.getElementById('top-screen').style.display = 'none';
+  document.getElementById('content').style.display = 'block';
+  renderFlow();
+}
+
+function renderFlow() {
+  const f = currentFlow;
+  let html = `<button class="flow-back" onclick="showTop()">${L('back')}</button>`;
+  html += `<div class="flow-title-bar"><div class="flow-title-icon">${f.icon}</div><div class="flow-title-text">${g(f.title)}</div></div>`;
+  f.steps.forEach(step => {
+    html += `<div class="step-card">`;
+    html += `<div class="step-header"><div class="step-no">${step.no}</div><div class="step-action">${g(step.action)}</div></div>`;
+    if (step.show) {
+      html += `<div class="step-show" onclick="showPopup(${JSON.stringify(step.show.ja)}, ${JSON.stringify(step.show)})">`;
+      html += `<div class="step-show-jp">${step.show.ja}</div>`;
+      if (lang !== 'ja') html += `<div class="step-show-tr">${g(step.show)}</div>`;
+      html += `<div class="step-show-hint">${L('show_screen')}</div></div>`;
+    }
+    if (step.options) {
+      const optId = 'opts_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+      window._optData = window._optData || {};
+      html += `<div class="step-options" id="${optId}">`;
+      step.options.forEach((opt, oi) => {
+        const key = optId + '_' + oi;
+        window._optData[key] = opt;
+        html += `<div class="step-opt" onclick="var o=window._optData['${key}'];showPopup(o.ja,o)">`;
+        html += `<div class="opt-jp">${opt.ja}</div>`;
+        if (lang !== 'ja') html += `<div class="opt-tr">${g(opt)}</div>`;
+        html += `</div>`;
+      });
+      html += `</div>`;
+    }
+    html += `</div>`;
+  });
+  document.getElementById('content').innerHTML = html;
+}
+
+function showGenba() {
+  currentMenu = 'genba'; currentFlow = null;
+  document.getElementById('top-screen').style.display = 'none';
+  document.getElementById('content').style.display = 'block';
+  renderGenba();
+}
+
+function renderGenba() {
+  let html = `<button class="flow-back" onclick="showTop()">${L('back')}</button>`;
+  html += `<div class="flow-title-bar"><div class="flow-title-icon">🏭</div><div class="flow-title-text">${L('genba_title')}</div></div>`;
+  DATA.genba.forEach((section, si) => {
+    html += `<div class="block" id="gb${si}">`;
+    html += `<div class="block-header" onclick="toggle('gb${si}')">`;
+    html += `<div class="block-icon">${section.icon}</div>`;
+    html += `<div class="block-title">${g(section.title)}</div>`;
+    html += `<span class="block-arrow">›</span></div>`;
+    html += `<div class="block-body"><div class="genba-items">`;
+    section.items.forEach((item, gi) => {
+      const gkey = 'gb_' + Date.now() + '_' + Math.random().toString(36).slice(2) + '_' + gi;
+      window._optData = window._optData || {};
+      window._optData[gkey] = item;
+      html += `<div class="genba-item" onclick="var o=window._optData['${gkey}'];showPopup(o.ja,o)">`;
+      html += `<div><div class="genba-jp">${item.ja}</div><div class="genba-kana">${item.kana||''}</div></div>`;
+      html += `<div class="genba-tr">${g(item)}</div>`;
+      html += `</div>`;
+    });
+    html += `</div></div></div>`;
+  });
+  document.getElementById('content').innerHTML = html;
+}
+
+function showMenu(cat) {
+  currentMenu = cat; currentFlow = null;
+  document.getElementById('top-screen').style.display = 'none';
+  document.getElementById('content').style.display = 'block';
+  renderMenu(cat);
+}
+
+function renderMenu(cat) {
+  const btns = cat === 'all' ? DATA.button : DATA.button.filter(b => b.cat === cat);
+  const cards = cat === 'all' ? DATA.card : DATA.card.filter(c => c.cat === cat);
+  let html = `<button class="flow-back" onclick="showTop()">${L('back')}</button>`;
+
+  btns.forEach((b, bi) => {
+    html += `<div class="block" id="bb${bi}">`;
+    html += `<div class="block-header" onclick="toggle('bb${bi}')">`;
+    html += `<div class="block-icon">${b.icon}</div>`;
+    html += `<div class="block-title">${g(b.title)}</div>`;
+    html += `<span class="block-arrow">›</span></div>`;
+    html += `<div class="block-body">`;
+    b.sections.forEach(sec => {
+      html += `<div class="sub-label">${g(sec.label)}</div>`;
+      const wide = sec.items.length <= 2;
+      html += `<div class="btn-grid${wide ? ' wide' : ''}">`;
+      sec.items.forEach((item, ii) => {
+        const key = 'pb_' + Date.now() + '_' + Math.random().toString(36).slice(2) + '_' + ii;
+        window._optData = window._optData || {};
+        window._optData[key] = {jp: item.jp, tr: item.tr};
+        html += `<button class="phrase-btn ${item.color||''}" onclick="var o=window._optData['${key}'];showPopup(o.jp,o.tr)">`;
+        html += `<div class="btn-jp">${item.jp}</div>`;
+        if (lang !== 'ja') html += `<div class="btn-tr">${item.tr[lang]||''}</div>`;
+        html += `</button>`;
+      });
+      html += `</div>`;
+    });
+    html += `</div></div>`;
+  });
+
+  cards.forEach((c, ci) => {
+    html += `<div class="block" id="cb${ci}">`;
+    html += `<div class="block-header" onclick="toggle('cb${ci}')">`;
+    html += `<div class="block-icon">${c.icon}</div>`;
+    html += `<div class="block-title">${g(c.title)}</div>`;
+    html += `<span class="block-arrow">›</span></div>`;
+    html += `<div class="block-body"><div class="card-items">`;
+    c.items.forEach(item => {
+      html += `<div class="card-item">`;
+      html += `<div class="item-jp">${item.jp}</div>`;
+      if (lang !== 'ja') html += `<div class="item-tr">${g(item.tr)}</div>`;
+      html += `</div>`;
+    });
+    html += `</div></div></div>`;
+  });
+
+  if (!btns.length && !cards.length) {
+    html += `<div style="text-align:center;padding:40px;color:var(--text-muted);">コンテンツがありません</div>`;
+  }
+  document.getElementById('content').innerHTML = html;
+}
+
+function toggle(id) { document.getElementById(id).classList.toggle('open'); }
+
+document.querySelectorAll('.lb').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.lb').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    lang = b.dataset.l;
+    updateLabels();
+    if (currentFlow) renderFlow();
+    else if (currentMenu === 'genba') renderGenba();
+    else if (currentMenu) renderMenu(currentMenu);
+  });
+});
+
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+updateLabels();
+// スワイプで戻る
+let _tsx = 0, _tsy = 0;
+document.addEventListener('touchstart', e => { _tsx = e.touches[0].clientX; _tsy = e.touches[0].clientY; }, { passive: true });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - _tsx;
+  const dy = Math.abs(e.changedTouches[0].clientY - _tsy);
+  if (dx > 60 && dy < 80) {
+    if (document.getElementById('overlay').classList.contains('show')) { closePopup(); return; }
+    if (currentFlow || currentMenu) showTop();
+  }
+}, { passive: true });
+</script>
 </body>
 </html>
