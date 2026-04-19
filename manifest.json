@@ -1,13 +1,13 @@
 {
-  "name": "げんばメモ",
-  "short_name": "げんばメモ",
-  "description": "製造現場の多言語用語集",
-  "start_url": "/",
+  "name": "トクシンメモ",
+  "short_name": "トクシンメモ",
+  "description": "Tokushin Group 現場・生活ガイド",
+  "start_url": "/tokushin-memo/",
   "display": "standalone",
-  "background_color": "#0f0f1a",
-  "theme_color": "#1a1a2e",
+  "background_color": "#1db87d",
+  "theme_color": "#1db87d",
   "icons": [
-    { "src": "icon.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "icon.png", "sizes": "512x512", "type": "image/png" }
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
   ]
 }
