@@ -1,285 +1,293 @@
-const TERMS = {
+const DATA = {
 
-  /* ══════════════════════════════════
-     共通
-  ══════════════════════════════════ */
+  // ========== フロー（困りごと） ==========
+  flow: [
+    {
+      id: "late", icon: "⏰",
+      title: { ja: "遅れそう", vi: "Sắp đi muộn", id: "Akan terlambat", en: "Going to be late.", bn: "দেরি হবে" },
+      steps: [
+        { no: 1,
+          action: { ja: "電話をかける", vi: "Gọi điện thoại", id: "Menelepon", en: "Call now.", bn: "ফোন করুন" },
+          show: { ja: "おはようございます。\n○○です。", vi: "Chào buổi sáng.\nTôi là ○○.", id: "Selamat pagi.\nSaya ○○.", en: "Good morning.\nThis is ○○.", bn: "শুভ সকাল।\nআমি ○○।" }
+        },
+        { no: 2,
+          action: { ja: "遅れることを伝える", vi: "Thông báo sẽ đến muộn", id: "Beritahu akan terlambat", en: "Tell them you're going to be late.", bn: "দেরি হবে জানান" },
+          show: { ja: "今日、遅刻します。\n○○分ほど遅れます。", vi: "Hôm nay tôi sẽ đi muộn.\nKhoảng ○○ phút.", id: "Hari ini saya terlambat.\nSekitar ○○ menit.", en: "I will be late today.\nAbout ○○ minutes late.", bn: "আজ দেরি হবে।\nআমি প্রায় ○○ মিনিট দেরি করব।" }
+        },
+        { no: 3,
+          action: { ja: "理由を選ぶ", vi: "Chọn lý do", id: "Pilih alasan", en: "Choose a reason", bn: "কারণ বেছে নিন" },
+          options: [
+            { ja: "電車が遅れています。", vi: "Tàu điện bị trễ.", id: "Kereta terlambat.", en: "The train is delayed.", bn: "ট্রেন দেরি হচ্ছে।" },
+            { ja: "渋滞しています。", vi: "Đường bị tắc.", id: "Macet.", en: "There is traffic.", bn: "যানজট আছে।" },
+            { ja: "寝坊しました。\n申し訳ありません。", vi: "Tôi dậy muộn.\nXin lỗi.", id: "Saya kesiangan.\nMaaf.", en: "I overslept.\nSorry.", bn: "ঘুম থেকে দেরিতে উঠেছি।\nমাফ করবেন।" },
+            { ja: "体調が悪いです。", vi: "Tôi không khỏe.", id: "Saya tidak enak badan.", en: "I'm not feeling well.", bn: "অসুস্থ বোধ করছি।" },
+          ]
+        },
+        { no: 4,
+          action: { ja: "締めの言葉", vi: "Lời kết", id: "Kata penutup", en: "Closing words", bn: "শেষ কথা" },
+          show: { ja: "よろしくお願いします。\n失礼します。", vi: "Xin hãy thông cảm.\nXin chào.", id: "Mohon pengertiannya.\nSampai jumpa.", en: "Thank you.\nGoodbye.", bn: "ধন্যবাদ বুঝার জন্য।\nবিদায়।" }
+        },
+      ]
+    },
+    {
+      id: "sick", icon: "🤒",
+      title: { ja: "体調が悪い・休みたい", vi: "Không khỏe / Muốn nghỉ", id: "Tidak enak badan / Ingin absen", en: "Feel sick / Want day off", bn: "অসুস্থ / ছুটি নিতে চাই" },
+      steps: [
+        { no: 1,
+          action: { ja: "電話をかける（始業30分前まで）", vi: "Gọi điện (trước 30 phút làm việc)", id: "Telepon (30 menit sebelum kerja)", en: "Call at least 30 min before work.", bn: "ফোন করুন (কাজ শুরুর ৩০ মিনিট আগে)" },
+          show: { ja: "おはようございます。\n○○です。", vi: "Chào buổi sáng.\nTôi là ○○.", id: "Selamat pagi.\nSaya ○○.", en: "Good morning.\nThis is ○○.", bn: "শুভ সকাল।\nআমি ○○।" }
+        },
+        { no: 2,
+          action: { ja: "休みたいことを伝える", vi: "Thông báo muốn nghỉ", id: "Beritahu ingin absen", en: "Tell them you need the day off.", bn: "ছুটি নিতে চান জানান" },
+          show: { ja: "今日、体調が悪くて\n休ませてください。\nよろしくお願いします。", vi: "Hôm nay tôi không khỏe,\nxin cho tôi nghỉ.\nCảm ơn.", id: "Hari ini saya tidak enak badan,\nmohon izin absen.\nTerima kasih.", en: "I'm not feeling well today.\nPlease let me take the day off.\nThank you.", bn: "আজ অসুস্থ বোধ করছি।\nছুটি দিন দয়া করে।\nধন্যবাদ।" }
+        },
+        { no: 3,
+          action: { ja: "症状を選ぶ（任意）", vi: "Chọn triệu chứng (tùy chọn)", id: "Pilih gejala (opsional)", en: "Choose a symptom (optional).", bn: "উপসর্গ বেছে নিন (ঐচ্ছিক)" },
+          options: [
+            { ja: "熱があります。", vi: "Tôi bị sốt.", id: "Saya demam.", en: "I have a fever.", bn: "জ্বর আছে।" },
+            { ja: "お腹が痛いです。", vi: "Tôi bị đau bụng.", id: "Saya sakit perut.", en: "I have a stomachache.", bn: "পেট ব্যথা আছে।" },
+            { ja: "頭が痛いです。", vi: "Tôi bị đau đầu.", id: "Saya sakit kepala.", en: "I have a headache.", bn: "মাথা ব্যথা আছে।" },
+            { ja: "病院に行きます。", vi: "Tôi sẽ đi bệnh viện.", id: "Saya akan ke rumah sakit.", en: "I will go to the hospital.", bn: "হাসপাতালে যাব।" },
+          ]
+        },
+      ]
+    },
+    {
+      id: "work_trouble", icon: "🔧",
+      title: { ja: "仕事でわからない・困った", vi: "Không hiểu / Gặp khó khăn", id: "Tidak mengerti / Ada masalah", en: "Don't understand / Having trouble", bn: "কাজে বুঝছি না / সমস্যা" },
+      steps: [
+        { no: 1,
+          action: { ja: "担当者を呼ぶ", vi: "Gọi người phụ trách", id: "Panggil penanggung jawab", en: "Call your supervisor", bn: "দায়িত্বশীলকে ডাকুন" },
+          show: { ja: "すみません。\n教えてください。", vi: "Xin lỗi.\nXin hãy chỉ cho tôi.", id: "Permisi.\nTolong ajarkan saya.", en: "Excuse me.\nPlease show me.", bn: "মাফ করবেন।\nআমাকে দেখান দয়া করে।" }
+        },
+        { no: 2,
+          action: { ja: "状況を選ぶ", vi: "Chọn tình huống", id: "Pilih situasi", en: "Choose your situation", bn: "পরিস্থিতি বেছে নিন" },
+          options: [
+            { ja: "これはどうやって\nやりますか？", vi: "Cái này làm thế nào ạ?", id: "Ini caranya bagaimana?", en: "How do I do this?", bn: "এটা কীভাবে করব?" },
+            { ja: "もう一度\n教えてください。", vi: "Xin hãy dạy lại một lần nữa.", id: "Tolong ajarkan sekali lagi.", en: "Please show me again.", bn: "আরেকবার শেখান দয়া করে।" },
+            { ja: "機械が\n動きません。", vi: "Máy không hoạt động.", id: "Mesin tidak berjalan.", en: "The machine won't work.", bn: "মেশিন কাজ করছে না।" },
+            { ja: "これは\n不良品ですか？", vi: "Cái này có phải hàng lỗi không?", id: "Apakah ini barang cacat?", en: "Is this defective?", bn: "এটা কি ত্রুটিপূর্ণ?" },
+            { ja: "危険です！\n止めてください！", vi: "Nguy hiểm!\nXin hãy dừng lại!", id: "Berbahaya!\nTolong hentikan!", en: "Danger!\nStop!", bn: "বিপজ্জনক!\nথামুন দয়া করে!" },
+            { ja: "終わりました。", vi: "Tôi đã xong.", id: "Sudah selesai.", en: "I'm done.", bn: "শেষ হয়েছে।" },
+          ]
+        },
+      ]
+    },
+    {
+      id: "garbage", icon: "🗑️",
+      title: { ja: "ゴミを出したい", vi: "Muốn đổ rác", id: "Ingin membuang sampah", en: "Want to take out garbage", bn: "ময়লা ফেলতে চাই" },
+      steps: [
+        { no: 1,
+          action: { ja: "ゴミの種類を確認する", vi: "Kiểm tra loại rác", id: "Periksa jenis sampah", en: "Check garbage type", bn: "ময়লার ধরন দেখুন" },
+          options: [
+            { ja: "燃えるゴミ\n（生ゴミ・紙・布）", vi: "Rác cháy\n(Thực phẩm, giấy, vải)", id: "Mudah terbakar\n(Sisa makanan, kertas, kain)", en: "Burnable\n(Food, paper, cloth)", bn: "পোড়ানো যায়\n(খাবার/কাগজ/কাপড়)" },
+            { ja: "燃えないゴミ\n（金属・ガラス・陶器）", vi: "Rác không cháy\n(Kim loại, thủy tinh, gốm)", id: "Tidak terbakar\n(Logam, kaca, keramik)", en: "Non-burnable\n(Metal, glass, ceramic)", bn: "পোড়ানো যায় না\n(ধাতু/কাচ/সিরামিক)" },
+            { ja: "資源ゴミ\n（ペットボトル・缶・瓶）", vi: "Rác tái chế\n(Chai nhựa, lon, chai thủy tinh)", id: "Daur ulang\n(Botol plastik, kaleng, botol kaca)", en: "Recyclable\n(Bottles, cans, glass)", bn: "রিসাইকেল\n(প্লাস্টিক/ক্যান/কাচ)" },
+          ]
+        },
+        { no: 2,
+          action: { ja: "収集日・時間を確認する", vi: "Kiểm tra ngày và giờ thu gom", id: "Periksa hari pengangkutan", en: "Check collection day/time", bn: "সংগ্রহের দিন দেখুন" },
+          show: { ja: "収集日の朝8時までに出す。\n前日の夜は出さないでください。", vi: "Đổ rác trước 8 giờ sáng ngày thu gom.\nKhông đổ vào tối hôm trước.", id: "Keluarkan sebelum jam 8 pagi.\nJangan malam sebelumnya.", en: "Put out by 8am on collection day.\nNot the night before.", bn: "সকাল ৮টার আগে রাখুন।\nআগের রাতে রাখবেন না।" }
+        },
+        { no: 3,
+          action: { ja: "指定袋に入れて出す", vi: "Cho vào túi quy định và đổ", id: "Masukkan ke kantong yang ditentukan", en: "Put in designated bag and take out", bn: "নির্ধারিত ব্যাগে রেখে ফেলুন" },
+          show: { ja: "指定のゴミ袋を使ってください。\nゴミ置き場に出してください。", vi: "Hãy dùng túi rác quy định.\nĐặt ở nơi để rác.", id: "Gunakan kantong sampah yang ditentukan.\nLetakkan di tempat pembuangan.", en: "Use the right garbage bag.\nPut it at the collection point.", bn: "নির্ধারিত ময়লার ব্যাগ ব্যবহার করুন।\nময়লা রাখার জায়গায় রাখুন।" }
+        },
+      ]
+    },
+    {
+      id: "hospital_flow", icon: "🏥",
+      title: { ja: "病院に行きたい", vi: "Muốn đi bệnh viện", id: "Ingin pergi ke rumah sakit", en: "Want to go to the hospital.", bn: "হাসপাতালে যেতে চাই" },
+      steps: [
+        { no: 1,
+          action: { ja: "保険証を持つ", vi: "Mang theo thẻ bảo hiểm", id: "Bawa kartu asuransi", en: "Bring your insurance card.", bn: "বীমা কার্ড নিন" },
+          show: { ja: "保険証を忘れずに\n持って行ってください。", vi: "Đừng quên mang theo\nthẻ bảo hiểm.", id: "Jangan lupa bawa\nkartu asuransi.", en: "Don't forget your\ninsurance card.", bn: "বীমা কার্ড নিতে\nভুলবেন না।" }
+        },
+        { no: 2,
+          action: { ja: "症状を選ぶ", vi: "Chọn triệu chứng", id: "Pilih gejala", en: "Choose your symptom", bn: "উপসর্গ বেছে নিন" },
+          options: [
+            { ja: "お腹が痛いです。", vi: "Tôi bị đau bụng.", id: "Saya sakit perut.", en: "I have a stomachache.", bn: "পেট ব্যথা আছে।" },
+            { ja: "頭が痛いです。", vi: "Tôi bị đau đầu.", id: "Saya sakit kepala.", en: "I have a headache.", bn: "মাথা ব্যথা আছে।" },
+            { ja: "熱があります。", vi: "Tôi bị sốt.", id: "Saya demam.", en: "I have a fever.", bn: "জ্বর আছে।" },
+            { ja: "ここが痛いです。\n（指さして）", vi: "Chỗ này đau.\n(Chỉ vào)", id: "Di sini sakit.\n(Tunjuk)", en: "It hurts here.\n(Point to it)", bn: "এখানে ব্যথা।\n(আঙুল দিয়ে দেখান)" },
+            { ja: "吐き気がします。", vi: "Tôi buồn nôn.", id: "Saya mual.", en: "I feel nauseous.", bn: "বমি বমি লাগছে।" },
+            { ja: "動けません。", vi: "Tôi không thể di chuyển.", id: "Saya tidak bisa bergerak.", en: "I cannot move.", bn: "নড়াচড়া করতে পারছি না।" },
+          ]
+        },
+        { no: 3,
+          action: { ja: "受付で見せる", vi: "Cho xem tại quầy lễ tân", id: "Tunjukkan di resepsionis", en: "Show this at reception.", bn: "রিসেপশনে দেখান" },
+          show: { ja: "初めて来ました。\n診察をお願いします。\n保険証があります。", vi: "Đây là lần đầu tôi đến.\nTôi muốn khám bệnh.\nTôi có thẻ bảo hiểm.", id: "Ini pertama kali saya datang.\nSaya ingin berobat.\nSaya punya kartu asuransi.", en: "This is my first visit.\nI would like to see a doctor.\nI have my insurance card.", bn: "প্রথমবার এসেছি।\nডাক্তার দেখাতে চাই।\nবীমা কার্ড আছে।" }
+        },
+        { no: 4,
+          action: { ja: "わからないとき", vi: "Khi không hiểu", id: "Ketika tidak mengerti", en: "When you don't understand.", bn: "না বুঝলে" },
+          show: { ja: "日本語がわかりません。\nゆっくり話してください。", vi: "Tôi không hiểu tiếng Nhật.\nXin hãy nói chậm lại.", id: "Saya tidak mengerti bahasa Jepang.\nTolong berbicara pelan-pelan.", en: "I don't understand Japanese.\nPlease speak slowly.", bn: "জাপানি বুঝি না।\nধীরে কথা বলুন।" }
+        },
+      ]
+    },
+  ],
 
-  "安全・緊急": { color:"#ef4444", emoji:"🔴", group:"共通", items:[
-    {ja:"危険",yomi:"きけん",vi:"Nguy hiểm",vi_k:"グイ・ヒエム",id:"Bahaya",id_k:"バハヤ",en:"Danger",en_k:"デンジャー",bn:"বিপদ",bn_k:"ビポッド"},
-    {ja:"注意",yomi:"ちゅうい",vi:"Cẩn thận",vi_k:"カン・タン",id:"Hati-hati",id_k:"ハティ・ハティ",en:"Caution",en_k:"コーション",bn:"সতর্কতা",bn_k:"シャトルコタ"},
-    {ja:"緊急停止",yomi:"きんきゅうていし",vi:"Dừng khẩn cấp",vi_k:"ズン・カン・カップ",id:"Henti darurat",id_k:"ヘンティ・ダルラット",en:"Emergency stop",en_k:"エマージェンシー・ストップ",bn:"জরুরি থামুন",bn_k:"ジョルリ・タムン"},
-    {ja:"火事",yomi:"かじ",vi:"Cháy",vi_k:"チャイ",id:"Kebakaran",id_k:"クバカラン",en:"Fire",en_k:"ファイアー",bn:"আগুন",bn_k:"アグン"},
-    {ja:"逃げてください",yomi:"にげてください",vi:"Hãy chạy trốn",vi_k:"ハイ・チャイ・チョン",id:"Tolong lari",id_k:"トロン・ラリ",en:"Please evacuate",en_k:"プリーズ・エバキュエイト",bn:"পালান",bn_k:"パラン"},
-    {ja:"助けてください",yomi:"たすけてください",vi:"Xin hãy giúp tôi",vi_k:"シン・ハイ・ジュップ・トイ",id:"Tolong bantu saya",id_k:"トロン・バントゥ・サヤ",en:"Please help me",en_k:"プリーズ・ヘルプ・ミー",bn:"আমাকে সাহায্য করুন",bn_k:"アマケ・シャハッジョ・コルン"},
-    {ja:"怪我をしました",yomi:"けがをしました",vi:"Tôi bị thương",vi_k:"トイ・ビ・トゥオン",id:"Saya terluka",id_k:"サヤ・テルルカ",en:"I am injured",en_k:"アイ・アム・インジャード",bn:"আমি আহত হয়েছি",bn_k:"アミ・アホト"},
-    {ja:"救急車",yomi:"きゅうきゅうしゃ",vi:"Xe cấp cứu",vi_k:"セー・カップ・クウ",id:"Ambulans",id_k:"アンブランス",en:"Ambulance",en_k:"アンビュランス",bn:"অ্যাম্বুলেন্স",bn_k:"アンブレンス"},
-    {ja:"消火器",yomi:"しょうかき",vi:"Bình chữa cháy",vi_k:"ビン・チュア・チャイ",id:"Alat pemadam api",id_k:"アラット・プマダム・アピ",en:"Fire extinguisher",en_k:"ファイアー・イクスティングイッシャー",bn:"অগ্নিনির্বাপক",bn_k:"オグニニルバポク"},
-    {ja:"ヘルメット",yomi:"へるめっと",vi:"Mũ bảo hộ",vi_k:"ムー・バオ・ホー",id:"Helm",id_k:"ヘルム",en:"Helmet",en_k:"ヘルメット",bn:"হেলমেট",bn_k:"ヘルメット"},
-    {ja:"手袋",yomi:"てぶくろ",vi:"Găng tay",vi_k:"ガン・タイ",id:"Sarung tangan",id_k:"サルン・タンガン",en:"Gloves",en_k:"グローブス",bn:"হাতমোজা",bn_k:"ハットモジャ"},
-    {ja:"安全靴",yomi:"あんぜんぐつ",vi:"Giày bảo hộ",vi_k:"ジャイ・バオ・ホー",id:"Sepatu safety",id_k:"スパトゥ・セーフティ",en:"Safety shoes",en_k:"セーフティ・シューズ",bn:"সেফটি জুতা",bn_k:"セフティ・ジュタ"},
-    {ja:"立入禁止",yomi:"たちいりきんし",vi:"Cấm vào",vi_k:"カム・バオ",id:"Dilarang masuk",id_k:"ディララン・マスック",en:"No entry",en_k:"ノー・エントリー",bn:"প্রবেশ নিষিদ্ধ",bn_k:"プロベシュ・ニシッド"},
-    {ja:"触れないでください",yomi:"ふれないでください",vi:"Đừng chạm vào",vi_k:"ドゥン・チャム・バオ",id:"Jangan disentuh",id_k:"ジャンガン・ディセントゥ",en:"Do not touch",en_k:"ドゥ・ノット・タッチ",bn:"স্পর্শ করবেন না",bn_k:"スポルシュ・コルベン・ナ"},
-    {ja:"電気",yomi:"でんき",vi:"Điện",vi_k:"ディエン",id:"Listrik",id_k:"リストリック",en:"Electricity",en_k:"エレクトリシティ",bn:"বিদ্যুৎ",bn_k:"ビドゥット"},
-    {ja:"保護メガネ",yomi:"ほごめがね",vi:"Kính bảo hộ",vi_k:"キン・バオ・ホー",id:"Kacamata pelindung",id_k:"カチャマタ・プリンドゥン",en:"Safety goggles",en_k:"セーフティ・ゴーグルス",bn:"সেফটি চশমা",bn_k:"セフティ・チョシュマ"},
-    {ja:"マスク",yomi:"ますく",vi:"Khẩu trang",vi_k:"カウ・チャン",id:"Masker",id_k:"マスカー",en:"Mask",en_k:"マスク",bn:"মাস্ক",bn_k:"マスク"}
-  ]},
+  // ========== ボタン系（タップして見せる） ==========
+  button: [
+    {
+      id: "emergency", cat: "emergency", icon: "🚨",
+      title: { ja: "緊急連絡", vi: "Khẩn cấp", id: "Darurat", en: "Emergency", bn: "জরুরি" },
+      sections: [
+        { label: { ja: "今すぐ電話", vi: "Gọi ngay", id: "Hubungi sekarang", en: "Call now", bn: "এখনই ফোন করুন" }, items: [
+          { jp: "119に電話\n（救急・火事）", tr: { vi: "Gọi 119\n(Cấp cứu / Cháy)", id: "Hubungi 119\n(Ambulans / Kebakaran)", en: "Call 119\n(Ambulance / Fire)", bn: "119 ফোন করুন\n(অ্যাম্বুলেন্স/আগুন)" }, color: "red" },
+          { jp: "110に電話\n（警察）", tr: { vi: "Gọi 110\n(Cảnh sát)", id: "Hubungi 110\n(Polisi)", en: "Call 110\n(Police)", bn: "110 ফোন করুন\n(পুলিশ)" }, color: "red" },
+        ]},
+        { label: { ja: "見せるフレーズ", vi: "Câu để cho xem", id: "Frasa untuk ditunjukkan", en: "Show these phrases", bn: "দেখানোর বাক্য" }, items: [
+          { jp: "助けてください！", tr: { vi: "Xin hãy giúp tôi!", id: "Tolong saya!", en: "Please help me!", bn: "সাহায্য করুন!" }, color: "red" },
+          { jp: "人が倒れています！", tr: { vi: "Có người bị ngã!", id: "Ada orang pingsan!", en: "Someone has collapsed!", bn: "কেউ পড়ে গেছেন!" }, color: "red" },
+          { jp: "火事です！", tr: { vi: "Có cháy!", id: "Ada kebakaran!", en: "There is a fire!", bn: "আগুন লেগেছে!" }, color: "red" },
+          { jp: "交通事故です！", tr: { vi: "Có tai nạn giao thông!", id: "Ada kecelakaan!", en: "Traffic accident!", bn: "সড়ক দুর্ঘটনা!" }, color: "red" },
+          { jp: "住所はここです\n（画面を見せる）", tr: { vi: "Địa chỉ ở đây\n(Cho xem màn hình)", id: "Alamatnya di sini\n(Tunjukkan layar)", en: "Address is here\n(Show screen)", bn: "ঠিকানা এখানে\n(স্ক্রিন দেখান)" }, color: "amber" },
+        ]},
+      ]
+    },
+    {
+      id: "hospital", cat: "hospital", icon: "🏥",
+      title: { ja: "病院・薬局", vi: "Bệnh viện / Nhà thuốc", id: "Rumah sakit / Apotek", en: "Hospital / Pharmacy", bn: "হাসপাতাল/ফার্মেসি" },
+      sections: [
+        { label: { ja: "症状を見せる", vi: "Cho xem triệu chứng", id: "Tunjukkan gejala", en: "Show symptoms", bn: "উপসর্গ দেখান" }, items: [
+          { jp: "お腹が痛いです", tr: { vi: "Tôi bị đau bụng", id: "Saya sakit perut", en: "I have a stomachache.", bn: "পেট ব্যথা আছে" }, color: "red" },
+          { jp: "頭が痛いです", tr: { vi: "Tôi bị đau đầu", id: "Saya sakit kepala", en: "I have a headache.", bn: "মাথা ব্যথা আছে" }, color: "red" },
+          { jp: "熱があります", tr: { vi: "Tôi bị sốt", id: "Saya demam", en: "I have a fever.", bn: "জ্বর আছে" }, color: "red" },
+          { jp: "吐き気がします", tr: { vi: "Tôi buồn nôn", id: "Saya mual", en: "I feel nauseous.", bn: "বমি বমি লাগছে" }, color: "red" },
+          { jp: "ここが痛いです\n（指さして）", tr: { vi: "Chỗ này đau\n(Chỉ vào)", id: "Di sini sakit\n(Tunjuk)", en: "It hurts here.\n(Point to it)", bn: "এখানে ব্যথা\n(আঙুল দিয়ে)" }, color: "red" },
+          { jp: "動けません", tr: { vi: "Tôi không thể di chuyển", id: "Saya tidak bisa bergerak", en: "I can't move.", bn: "নড়াচড়া করতে পারছি না" }, color: "red" },
+        ]},
+        { label: { ja: "受付で使う", vi: "Dùng tại quầy lễ tân", id: "Gunakan di resepsionis", en: "Use at reception", bn: "রিসেপশনে ব্যবহার করুন" }, items: [
+          { jp: "初めて来ました\n診察をお願いします", tr: { vi: "Lần đầu đến\nMuốn khám bệnh", id: "Pertama kali datang\nIngin berobat", en: "First visit.\nI'd like to see a doctor.", bn: "প্রথমবার এসেছি\nডাক্তার দেখাতে চাই" }, color: "green" },
+          { jp: "保険証があります", tr: { vi: "Tôi có thẻ bảo hiểm", id: "Saya punya kartu asuransi", en: "I have my insurance card", bn: "বীমা কার্ড আছে" }, color: "green" },
+          { jp: "保険証を忘れました", tr: { vi: "Tôi quên thẻ bảo hiểm", id: "Saya lupa kartu asuransi", en: "I forgot my insurance card.", bn: "বীমা কার্ড ভুলে এসেছি" }, color: "amber" },
+          { jp: "日本語がわかりません", tr: { vi: "Tôi không hiểu tiếng Nhật", id: "Tidak mengerti bahasa Jepang", en: "I don't understand Japanese.", bn: "জাপানি বুঝি না" }, color: "amber" },
+          { jp: "処方箋があります\n薬をお願いします", tr: { vi: "Có đơn thuốc\nXin thuốc", id: "Punya resep\nMinta obat", en: "I have a prescription.\nPlease give me the medicine.", bn: "প্রেসক্রিপশন আছে\nওষুধ দিন" }, color: "green" },
+        ]},
+      ]
+    },
+    {
+      id: "absence", cat: "work", icon: "📞",
+      title: { ja: "遅刻・欠勤連絡", vi: "Báo đi muộn / vắng mặt", id: "Lapor terlambat / absen", en: "Late / Absence Notice", bn: "দেরি/অনুপস্থিতির বিজ্ঞপ্তি" },
+      sections: [
+        { label: { ja: "電話で使う", vi: "Dùng khi gọi điện", id: "Gunakan saat menelepon", en: "Use on the phone", bn: "ফোনে ব্যবহার করুন" }, items: [
+          { jp: "○○です。今日\n遅刻します", tr: { vi: "Tôi là ○○. Hôm nay\ntôi sẽ đi muộn", id: "Saya ○○. Hari ini\nsaya akan terlambat", en: "This is ○○. I will be\nlate today.", bn: "আমি ○○। আজ\nদেরি হবে" }, color: "amber" },
+          { jp: "○○です。体調が悪く\n今日休みます", tr: { vi: "Tôi là ○○. Tôi bị bệnh\nvà nghỉ hôm nay", id: "Saya ○○. Saya sakit\ndan absen hari ini", en: "This is ○○. I'm sick\nand absent today.", bn: "আমি ○○। অসুস্থ\nআজ কাজে আসতে পারব না" }, color: "red" },
+          { jp: "電車が遅れています\n○○分遅刻します", tr: { vi: "Tàu điện bị trễ\nTôi sẽ muộn ○○ phút", id: "Kereta terlambat\nSaya terlambat ○○ menit", en: "The train is delayed.\nAbout ○○ minutes late.", bn: "ট্রেন দেরি হচ্ছে\n○○ মিনিট দেরি হবে" }, color: "amber" },
+          { jp: "よろしく\nお願いします", tr: { vi: "Xin hãy thông cảm", id: "Mohon\npengertiannya", en: "Thank you.", bn: "ধন্যবাদ\nঅনুগ্রহ করে বুঝুন" }, color: "green" },
+        ]},
+      ]
+    },
+    {
+      id: "cityhall", cat: "life", icon: "🏛️",
+      title: { ja: "役所・銀行", vi: "Cơ quan hành chính / Ngân hàng", id: "Kantor pemerintah / Bank", en: "City Hall / Bank", bn: "সরকারি অফিস/ব্যাংক" },
+      sections: [
+        { label: { ja: "役所・銀行で見せる", vi: "Cho xem tại cơ quan / ngân hàng", id: "Tunjukkan di kantor / bank", en: "Show at city hall / bank", bn: "অফিস/ব্যাংকে দেখান" }, items: [
+          { jp: "転入届を出したいです", tr: { vi: "Muốn nộp đơn đăng ký chuyển đến", id: "Ingin mengajukan pendaftaran pindah", en: "I need to register my move.", bn: "বাসস্থান পরিবর্তন নিবন্ধন করতে চাই" }, color: "green" },
+          { jp: "マイナンバーカードを\n作りたいです", tr: { vi: "Muốn làm thẻ My Number", id: "Ingin membuat kartu My Number", en: "I need a My Number card.", bn: "মাই নম্বর কার্ড বানাতে চাই" }, color: "green" },
+          { jp: "日本語がわかりません\n通訳はいますか？", tr: { vi: "Không hiểu tiếng Nhật\nCó phiên dịch không?", id: "Tidak mengerti Jepang\nAda penerjemah?", en: "I don't understand Japanese.\nIs there an interpreter?", bn: "জাপানি বুঝি না\nদোভাষী আছেন?" }, color: "amber" },
+          { jp: "口座を開きたいです", tr: { vi: "Muốn mở tài khoản", id: "Ingin membuka rekening", en: "I need to open an account.", bn: "অ্যাকাউন্ট খুলতে চাই" }, color: "green" },
+          { jp: "海外にお金を送りたいです", tr: { vi: "Muốn gửi tiền ra nước ngoài", id: "Ingin mengirim uang ke luar negeri", en: "I need to send money overseas.", bn: "বিদেশে টাকা পাঠাতে চাই" }, color: "green" },
+        ]},
+      ]
+    },
+    {
+      id: "supermarket", cat: "life", icon: "🛒",
+      title: { ja: "スーパー・買い物", vi: "Siêu thị / Mua sắm", id: "Supermarket / Belanja", en: "Supermarket / Shopping", bn: "সুপারমার্কেট/কেনাকাটা" },
+      sections: [
+        { label: { ja: "店員に見せる", vi: "Cho nhân viên xem", id: "Tunjukkan ke pegawai", en: "Show to staff", bn: "কর্মীকে দেখান" }, items: [
+          { jp: "これはどこにありますか？", tr: { vi: "Cái này ở đâu ạ?", id: "Di mana ini?", en: "Where is this?", bn: "এটা কোথায় আছে?" }, color: "green" },
+          { jp: "袋をください", tr: { vi: "Cho tôi một túi", id: "Tolong berikan kantong", en: "Please give me a bag.", bn: "একটা ব্যাগ দিন" }, color: "green" },
+          { jp: "ポイントカードがあります", tr: { vi: "Tôi có thẻ tích điểm", id: "Saya punya kartu poin", en: "I have a point card.", bn: "পয়েন্ট কার্ড আছে" }, color: "green" },
+          { jp: "セルフレジの使い方を\n教えてください", tr: { vi: "Xin hướng dẫn dùng\nmáy tự phục vụ", id: "Tolong ajarkan cara\nkasir mandiri", en: "How do I use\nthe self-checkout?", bn: "সেলফ চেকআউট কীভাবে\nব্যবহার করবেন শেখান" }, color: "amber" },
+        ]},
+      ]
+    },
+      {
+      id: "religion", cat: "religion", icon: "🍱",
+      title: { ja: "食事・宗教の配慮", vi: "Chế độ ăn uống", id: "Diet / Agama", en: "Diet / Religion", bn: "খাদ্য / ধর্ম" },
+      sections: [
+        { label: { ja: "食べられないものを伝える", vi: "Nói về thứ không ăn được", id: "Makanan yang tidak bisa dimakan", en: "Tell them what you cannot eat", bn: "কী খেতে পারেন না বলুন" }, items: [
+          { jp: "豚肉は食べられません", tr: { vi: "Tôi không ăn thịt lợn", id: "Saya tidak makan daging babi", en: "I can't eat pork.", bn: "আমি শুয়োরের মাংস খাই না" }, color: "amber" },
+          { jp: "アルコールは飲めません", tr: { vi: "Tôi không uống rượu", id: "Saya tidak minum alkohol", en: "I don't drink alcohol.", bn: "আমি মদ পান করি না" }, color: "amber" },
+          { jp: "ハラール食を希望します", tr: { vi: "Tôi cần thức ăn Halal", id: "Saya perlu makanan Halal", en: "I need Halal food.", bn: "আমার হালাল খাবার দরকার" }, color: "amber" },
+          { jp: "牛肉は食べられません", tr: { vi: "Tôi không ăn thịt bò", id: "Saya tidak makan daging sapi", en: "I can't eat beef.", bn: "আমি গরুর মাংস খাই না" }, color: "amber" },
+          { jp: "肉類は食べません", tr: { vi: "Tôi không ăn thịt", id: "Saya tidak makan daging", en: "I don't eat meat.", bn: "আমি মাংস খাই না" }, color: "green" },
+          { jp: "アレルギーがあります", tr: { vi: "Tôi bị dị ứng", id: "Saya punya alergi", en: "I have allergies.", bn: "আমার অ্যালার্জি আছে" }, color: "red" },
+        ]},
+        { label: { ja: "礼拝について", vi: "Về việc cầu nguyện", id: "Tentang sholat", en: "About prayer", bn: "নামাজ সম্পর্কে" }, items: [
+          { jp: "お祈りの時間が必要です", tr: { vi: "Tôi cần thời gian cầu nguyện", id: "Saya perlu waktu sholat", en: "I need time to pray.", bn: "আমার নামাজের সময় দরকার" }, color: "green" },
+          { jp: "お祈りできる場所を\n教えてください", tr: { vi: "Xin chỉ nơi có thể cầu nguyện", id: "Tolong tunjukkan tempat sholat", en: "Please show me a place to pray.", bn: "নামাজ পড়ার জায়গা দেখান" }, color: "green" },
+          { jp: "断食中です（ラマダン）", tr: { vi: "Tôi đang nhịn ăn (Ramadan)", id: "Saya sedang puasa (Ramadan)", en: "I'm fasting. (Ramadan)", bn: "আমি রোজা রাখছি (রমজান)" }, color: "amber" },
+        ]},
+      ]
+    },
+  ],
 
-  "作業指示": { color:"#f59e0b", emoji:"🟡", group:"共通", items:[
-    {ja:"始めてください",yomi:"はじめてください",vi:"Hãy bắt đầu",vi_k:"ハイ・バット・ダウ",id:"Silakan mulai",id_k:"シラカン・ムライ",en:"Please start",en_k:"プリーズ・スタート",bn:"শুরু করুন",bn_k:"シュル・コルン"},
-    {ja:"止めてください",yomi:"とめてください",vi:"Hãy dừng lại",vi_k:"ハイ・ズン・ライ",id:"Tolong hentikan",id_k:"トロン・ヘンティカン",en:"Please stop",en_k:"プリーズ・ストップ",bn:"থামুন",bn_k:"タムン"},
-    {ja:"もう一度",yomi:"もういちど",vi:"Một lần nữa",vi_k:"モット・ラン・ヌア",id:"Sekali lagi",id_k:"スカリ・ラギ",en:"One more time",en_k:"ワン・モア・タイム",bn:"আরেকবার",bn_k:"アレクバル"},
-    {ja:"ゆっくり",yomi:"ゆっくり",vi:"Chậm thôi",vi_k:"チャム・トイ",id:"Pelan-pelan",id_k:"プラン・プラン",en:"Slowly",en_k:"スローリー",bn:"ধীরে",bn_k:"ディレ"},
-    {ja:"速く",yomi:"はやく",vi:"Nhanh lên",vi_k:"ニャン・レン",id:"Lebih cepat",id_k:"ルビ・チュパット",en:"Faster",en_k:"ファスター",bn:"দ্রুত",bn_k:"ドルット"},
-    {ja:"わかりましたか？",yomi:"わかりましたか",vi:"Bạn hiểu chưa?",vi_k:"バン・ヒウ・チュア",id:"Apakah mengerti?",id_k:"アパカー・ムンゲルティ",en:"Do you understand?",en_k:"ドゥ・ユー・アンダスタンド",bn:"বুঝেছেন?",bn_k:"ブジェチェン"},
-    {ja:"わかりました",yomi:"わかりました",vi:"Tôi hiểu rồi",vi_k:"トイ・ヒウ・ロイ",id:"Saya mengerti",id_k:"サヤ・ムンゲルティ",en:"I understand",en_k:"アイ・アンダスタンド",bn:"বুঝেছি",bn_k:"ブジェチ"},
-    {ja:"わかりません",yomi:"わかりません",vi:"Tôi không hiểu",vi_k:"トイ・コン・ヒウ",id:"Saya tidak mengerti",id_k:"サヤ・ティダック・ムンゲルティ",en:"I don't understand",en_k:"アイ・ドント・アンダスタンド",bn:"বুঝিনি",bn_k:"ブジニ"},
-    {ja:"見てください",yomi:"みてください",vi:"Hãy nhìn vào đây",vi_k:"ハイ・ニン・バオ・ダイ",id:"Tolong lihat",id_k:"トロン・リハット",en:"Please watch",en_k:"プリーズ・ウォッチ",bn:"দেখুন",bn_k:"デクン"},
-    {ja:"確認してください",yomi:"かくにんしてください",vi:"Hãy kiểm tra",vi_k:"ハイ・キエム・チャ",id:"Tolong periksa",id_k:"トロン・プリクサ",en:"Please check",en_k:"プリーズ・チェック",bn:"চেক করুন",bn_k:"チェック・コルン"},
-    {ja:"手伝ってください",yomi:"てつだってください",vi:"Hãy giúp tôi",vi_k:"ハイ・ジュップ・トイ",id:"Tolong bantu",id_k:"トロン・バントゥ",en:"Please help",en_k:"プリーズ・ヘルプ",bn:"সাহায্য করুন",bn_k:"シャハッジョ・コルン"},
-    {ja:"運んでください",yomi:"はこんでください",vi:"Hãy mang đi",vi_k:"ハイ・マン・ディ",id:"Tolong bawa",id_k:"トロン・バワ",en:"Please carry",en_k:"プリーズ・キャリー",bn:"নিয়ে যান",bn_k:"ニエ・ジャン"},
-    {ja:"並べてください",yomi:"ならべてください",vi:"Hãy sắp xếp",vi_k:"ハイ・サップ・セップ",id:"Tolong susun",id_k:"トロン・ススン",en:"Please line up",en_k:"プリーズ・ライン・アップ",bn:"সাজান",bn_k:"シャジャン"},
-    {ja:"気をつけてください",yomi:"きをつけてください",vi:"Hãy cẩn thận",vi_k:"ハイ・カン・タン",id:"Tolong berhati-hati",id_k:"トロン・ブルハティ・ハティ",en:"Please be careful",en_k:"プリーズ・ビー・ケアフル",bn:"সাবধান থাকুন",bn_k:"シャブダン・タクン"},
-    {ja:"交代",yomi:"こうたい",vi:"Thay ca",vi_k:"タイ・カ",id:"Ganti shift",id_k:"ガンティ・シフト",en:"Shift change",en_k:"シフト・チェンジ",bn:"শিফট পরিবর্তন",bn_k:"シフト・ポリボルトン"}
-  ]},
+  // ========== 現場メモ ==========
+  genba: [
+    {
+      id: "basic", cat: "genba", icon: "🏭",
+      title: { ja: "現場で使うフレーズ", vi: "Cụm từ tại hiện trường", id: "Frasa di lapangan", en: "Field phrases", bn: "কাজের মাঠে বাক্য" },
+      items: [
+        { ja: "わかりません", vi: "Tôi không hiểu", id: "Saya tidak mengerti", en: "I don't understand.", bn: "বুঝি না", kana: "わかりません" },
+        { ja: "もう一度お願いします", vi: "Xin hãy làm lại một lần nữa", id: "Tolong lakukan sekali lagi", en: "Please do it again.", bn: "আবার করুন দয়া করে", kana: "もういちどおねがいします" },
+        { ja: "終わりました", vi: "Đã xong", id: "Sudah selesai", en: "I'm done.", bn: "শেষ হয়েছে", kana: "おわりました" },
+        { ja: "危ないです", vi: "Nguy hiểm", id: "Berbahaya", en: "It's dangerous!", bn: "বিপজ্জনক", kana: "あぶないです" },
+        { ja: "不良です", vi: "Hàng lỗi", id: "Ini cacat", en: "This is defective.", bn: "এটা ত্রুটিপূর্ণ", kana: "ふりょうです" },
+      ]
+    },
+  ],
 
-  "作業動作": { color:"#f97316", emoji:"🤲", group:"共通", items:[
-    {ja:"押す",yomi:"おす",vi:"Đẩy",vi_k:"ダイ",id:"Dorong",id_k:"ドロン",en:"Push",en_k:"プッシュ",bn:"ঠেলুন",bn_k:"テルン"},
-    {ja:"引く",yomi:"ひく",vi:"Kéo",vi_k:"ケオ",id:"Tarik",id_k:"タリック",en:"Pull",en_k:"プル",bn:"টানুন",bn_k:"タヌン"},
-    {ja:"持つ",yomi:"もつ",vi:"Cầm",vi_k:"カム",id:"Pegang",id_k:"プガン",en:"Hold",en_k:"ホールド",bn:"ধরুন",bn_k:"ドルン"},
-    {ja:"置く",yomi:"おく",vi:"Đặt",vi_k:"ダット",id:"Letakkan",id_k:"ルタッカン",en:"Place",en_k:"プレイス",bn:"রাখুন",bn_k:"ラクン"},
-    {ja:"持ち上げる",yomi:"もちあげる",vi:"Nâng lên",vi_k:"ナン・レン",id:"Angkat",id_k:"アンカット",en:"Lift",en_k:"リフト",bn:"তুলুন",bn_k:"トゥルン"},
-    {ja:"下ろす",yomi:"おろす",vi:"Hạ xuống",vi_k:"ハー・スオン",id:"Turunkan",id_k:"トゥルンカン",en:"Lower",en_k:"ロワー",bn:"নামান",bn_k:"ナマン"},
-    {ja:"締ぁる",yomi:"しめる",vi:"Siết chặt",vi_k:"シエット・チャット",id:"Kencangkan",id_k:"ケンチャンカン",en:"Tighten",en_k:"タイトン",bn:"শক্ত করুন",bn_k:"シャクト・コルン"},
-    {ja:"緩ぁる",yomi:"ゆるめる",vi:"Nới lỏng",vi_k:"ノイ・ロン",id:"Kendurkan",id_k:"ケンドゥルカン",en:"Loosen",en_k:"ルーズン",bn:"ঢিলা করুন",bn_k:"ディラ・コルン"},
-    {ja:"切る",yomi:"きる",vi:"Cắt",vi_k:"カット",id:"Potong",id_k:"ポトン",en:"Cut",en_k:"カット",bn:"কাটুন",bn_k:"カトゥン"},
-    {ja:"つける",yomi:"つける",vi:"Bật",vi_k:"バット",id:"Nyalakan",id_k:"ニャラカン",en:"Turn on",en_k:"ターン・オン",bn:"চালু করুন",bn_k:"チャル・コルン"},
-    {ja:"消す",yomi:"けす",vi:"Tắt",vi_k:"タット",id:"Matikan",id_k:"マティカン",en:"Turn off",en_k:"ターン・オフ",bn:"বন্ধ করুন",bn_k:"ボンド・コルン"},
-    {ja:"取り付ける",yomi:"とりつける",vi:"Lắp đặt",vi_k:"ラップ・ダット",id:"Pasang",id_k:"パサン",en:"Attach",en_k:"アタッチ",bn:"লাগান",bn_k:"ラガン"},
-    {ja:"取り外す",yomi:"とりはずす",vi:"Tháo ra",vi_k:"タオ・ラ",id:"Lepaskan",id_k:"ルパスカン",en:"Remove",en_k:"リムーブ",bn:"খুলুন",bn_k:"クルン"},
-    {ja:"回す",yomi:"まわす",vi:"Xoay",vi_k:"ソアイ",id:"Putar",id_k:"プタル",en:"Rotate",en_k:"ローテート",bn:"ঘোরান",bn_k:"ゴラン"},
-    {ja:"入れる",yomi:"いれる",vi:"Cho v ao",vi_k:"チョ・バオ",id:"Masukkan",id_k:"マスッカン",en:"Insert",en_k:"インサート",bn:"ঢোকান",bn_k:"ドカン"}
-  ]},
-
-  "品質・検査": { color:"#10b981", emoji:"🟢", group:"共通", items:[
-    {ja:"OK",yomi:"おーけー",vi:"Được",vi_k:"ドゥオック",id:"Oke",id_k:"オーケー",en:"OK",en_k:"オーケー",bn:"ঠিক আছে",bn_k:"ティック・アチェ"},
-    {ja:"NG（不合格）",yomi:"えぬじー",vi:"Không đạt",vi_k:"コン・ダット",id:"Tidak lulus",id_k:"ティダック・ルルス",en:"Not good / Reject",en_k:"ノット・グッド",bn:"ব্যর্থ",bn_k:"ビャルト"},
-    {ja:"不良品",yomi:"ふりょうひん",vi:"Hàng lỗi",vi_k:"ハン・ロイ",id:"Produk cacat",id_k:"プロドゥック・チャチャット",en:"Defective product",en_k:"ディフェクティブ・プロダクト",bn:"ত্রুটিপূর্ণ পণ্য",bn_k:"トルティプルノ・ポノ"},
-    {ja:"傷",yomi:"きず",vi:"Vết trầy",vi_k:"ベット・チャイ",id:"Goresan",id_k:"ゴルサン",en:"Scratch",en_k:"スクラッチ",bn:"আঁচড়",bn_k:"アンチョル"},
-    {ja:"汚れ",yomi:"よごれ",vi:"Vết bẩn",vi_k:"ベット・バン",id:"Kotoran",id_k:"コトラン",en:"Dirt / Stain",en_k:"ダート",bn:"ময়লা",bn_k:"モイラ"},
-    {ja:"やり直し",yomi:"やりなおし",vi:"Làm lại",vi_k:"ラム・ライ",id:"Kerjakan ulang",id_k:"クルジャカン・ウラン",en:"Redo",en_k:"リドゥ",bn:"আবার করুন",bn_k:"アバール・コルン"},
-    {ja:"検査",yomi:"けんさ",vi:"Kiểm tra",vi_k:"キエム・チャ",id:"Inspeksi",id_k:"インスペクシ",en:"Inspection",en_k:"インスペクション",bn:"পরিদর্শন",bn_k:"ポリドルション"},
-    {ja:"数を数えてください",yomi:"かずをかぞえてください",vi:"Hãy đếm số lượng",vi_k:"ハイ・デム・ソー・ルオン",id:"Tolong hitung jumlahnya",id_k:"トロン・ヒトゥン",en:"Please count",en_k:"プリーズ・カウント",bn:"গণনা করুন",bn_k:"ゴノナ・コルン"},
-    {ja:"足りない",yomi:"たりない",vi:"Không đủ",vi_k:"コン・ドゥー",id:"Kurang",id_k:"クラン",en:"Not enough",en_k:"ノット・イナフ",bn:"পর্যাপ্ত নয়",bn_k:"ポルジャプト・ノイ"},
-    {ja:"別にしてください",yomi:"べつにしてください",vi:"Hãy để riêng ra",vi_k:"ハイ・デ・リエン・ラ",id:"Tolong pisahkan",id_k:"トロン・ピサーカン",en:"Please separate",en_k:"プリーズ・セパレート",bn:"আলাদা করুন",bn_k:"アラダ・コルン"},
-    {ja:"合格品",yomi:"ごうかくひん",vi:"Sản phẩm đạt",vi_k:"サン・ファム・ダット",id:"Produk lulus",id_k:"プロドゥック・ルルス",en:"Passed product",en_k:"パスト・プロダクト",bn:"পাস পণ্য",bn_k:"パス・ポノ"},
-    {ja:"サンプル",yomi:"さんぷる",vi:"Mẫu",vi_k:"マウ",id:"Sampel",id_k:"サンプル",en:"Sample",en_k:"サンプル",bn:"নমুনা",bn_k:"ノムナ"}
-  ]},
-
-  "測定・位置": { color:"#6366f1", emoji:"📏", group:"共通", items:[
-    {ja:"右",yomi:"みぎ",vi:"Phải",vi_k:"ファイ",id:"Kanan",id_k:"カナン",en:"Right",en_k:"ライト",bn:"ডান",bn_k:"ダン"},
-    {ja:"左",yomi:"ひだり",vi:"Trái",vi_k:"チャイ",id:"Kiri",id_k:"キリ",en:"Left",en_k:"レフト",bn:"বাম",bn_k:"バム"},
-    {ja:"上",yomi:"うえ",vi:"Trên",vi_k:"チェン",id:"Atas",id_k:"アタス",en:"Up / Above",en_k:"アップ",bn:"উপরে",bn_k:"ウポレ"},
-    {ja:"下",yomi:"した",vi:"Dưới",vi_k:"ズオイ",id:"Bawah",id_k:"バワ",en:"Down / Below",en_k:"ダウン",bn:"নিচে",bn_k:"ニチェ"},
-    {ja:"前",yomi:"まえ",vi:"Phía trước",vi_k:"フィア・チュオック",id:"Depan",id_k:"デパン",en:"Front",en_k:"フロント",bn:"সামনে",bn_k:"シャムネ"},
-    {ja:"後ろ",yomi:"うしろ",vi:"Phía sau",vi_k:"フィア・サウ",id:"Belakang",id_k:"ブラカン",en:"Back / Behind",en_k:"バック",bn:"পিছনে",bn_k:"ピチネ"},
-    {ja:"ミリ",yomi:"みり",vi:"Milimet",vi_k:"ミリメット",id:"Milimeter",id_k:"ミリメーター",en:"Millimeter",en_k:"ミリメーター",bn:"মিলিমিটার",bn_k:"ミリメーター"},
-    {ja:"センチ",yomi:"せんち",vi:"Centimét",vi_k:"センチメット",id:"Centimeter",id_k:"センチメーター",en:"Centimeter",en_k:"センチメーター",bn:"সেন্টিমিটার",bn_k:"センチメーター"},
-    {ja:"メートル",yomi:"ぁーとる",vi:"Mét",vi_k:"メット",id:"Meter",id_k:"メーター",en:"Meter",en_k:"メーター",bn:"মিটার",bn_k:"メーター"},
-    {ja:"キロ",yomi:"きろ",vi:"Kilo",vi_k:"キロ",id:"Kilo",id_k:"キロ",en:"Kilogram",en_k:"キログラム",bn:"কিলো",bn_k:"キロ"},
-    {ja:"厚み",yomi:"あつみ",vi:"Độ dày",vi_k:"ドー・ザイ",id:"Ketebalan",id_k:"クトゥバラン",en:"Thickness",en_k:"シックネス",bn:"পুরুত্ব",bn_k:"プルット"},
-    {ja:"幅",yomi:"はば",vi:"Chiều rộng",vi_k:"チウ・ロン",id:"Lebar",id_k:"ルバル",en:"Width",en_k:"ウィドス",bn:"প্রস্থ",bn_k:"プロスト"},
-    {ja:"長さ",yomi:"ながさ",vi:"Chiều dài",vi_k:"チウ・ザイ",id:"Panjang",id_k:"パンジャン",en:"Length",en_k:"レングス",bn:"দৈর্ঘ্য",bn_k:"ダイルゴ"}
-  ]},
-
-  "設備・機械": { color:"#0891b2", emoji:"⚙️", group:"共通", items:[
-    {ja:"機械",yomi:"きかい",vi:"Máy móc",vi_k:"マイ・モック",id:"Mesin",id_k:"ムシン",en:"Machine",en_k:"マシーン",bn:"যন্ত্র",bn_k:"ジョントロ"},
-    {ja:"スイッチ",yomi:"すいっち",vi:"Công tắc",vi_k:"コン・タック",id:"Saklar",id_k:"サクラル",en:"Switch",en_k:"スイッチ",bn:"সুইচ",bn_k:"スイッチ"},
-    {ja:"ボタン",yomi:"ぼたん",vi:"Nút",vi_k:"ヌット",id:"Tombol",id_k:"トンボル",en:"Button",en_k:"ボタン",bn:"বোতাম",bn_k:"ボタム"},
-    {ja:"センサー",yomi:"せんさー",vi:"Cảm biến",vi_k:"カム・ビエン",id:"Sensor",id_k:"センサー",en:"Sensor",en_k:"センサー",bn:"সেন্সর",bn_k:"センサー"},
-    {ja:"モーター",yomi:"もーたー",vi:"Động cơ",vi_k:"ドン・コ",id:"Motor",id_k:"モトル",en:"Motor",en_k:"モーター",bn:"মোটর",bn_k:"モーター"},
-    {ja:"ベルト",yomi:"べると",vi:"Dây curoa",vi_k:"ザイ・クロア",id:"Belt",id_k:"ベルト",en:"Belt",en_k:"ベルト",bn:"বেল্ট",bn_k:"ベルト"},
-    {ja:"コンベア",yomi:"こんべあ",vi:"Băng chuyền",vi_k:"バン・チュエン",id:"Konveyor",id_k:"コンベヤー",en:"Conveyor",en_k:"コンベヤー",bn:"কনভেয়ার",bn_k:"コンベヤー"},
-    {ja:"故障",yomi:"こしょう",vi:"H���ng hóc",vi_k:"ホン・ホック",id:"Rusak",id_k:"ルサック",en:"Breakdown",en_k:"ブレイクダウン",bn:"নষ্ট",bn_k:"ノシュト"},
-    {ja:"修理",yomi:"しゅうり",vi:"Sửa chữa",vi_k:"スア・チュア",id:"Perbaikan",id_k:"プルバイカン",en:"Repair",en_k:"リペア",bn:"মেরামত",bn_k:"メラマット"},
-    {ja:"電源",yomi:"でんげん",vi:"Nguồn điện",vi_k:"ンゲン・ディエン",id:"Sumber listrik",id_k:"スンブル・リストリック",en:"Power source",en_k:"パワー・ソース",bn:"বিদ্যুৎ উৎস",bn_k:"ビドゥット"},
-    {ja:"異常",yomi:"いじょう",vi:"Bất thường",vi_k:"バット・トゥオン",id:"Tidak normal",id_k:"ティダック・ノルマル",en:"Abnormal",en_k:"アブノーマル",bn:"অস্বাভাবিক",bn_k:"アシュワバビック"},
-    {ja:"振動",yomi:"しんどう",vi:"Rung động",vi_k:"ルン・ドン",id:"Getaran",id_k:"ゲタラン",en:"Vibration",en_k:"バイブレーション",bn:"কম্পন",bn_k:"コンポン"}
-  ]},
-
-  "職場ルール": { color:"#7c3aed", emoji:"👔", group:"共通", items:[
-    {ja:"出勤",yomi:"しゅっきん",vi:"Đi làm",vi_k:"ディ・ラム",id:"Masuk kerja",id_k:"マスック・クルジャ",en:"Go to work",en_k:"ゴー・トゥ・ワーク",bn:"কাজে আসুন",bn_k:"カジェ・アシュン"},
-    {ja:"遅刻",yomi:"ちこく",vi:"Đi trễ",vi_k:"ディ・チェ",id:"Terlambat",id_k:"テルランバット",en:"Late",en_k:"レイト",bn:"দেরি",bn_k:"デリ"},
-    {ja:"欠勤",yomi:"けっきん",vi:"Vắng mặt",vi_k:"バン・マット",id:"Absen",id_k:"アブセン",en:"Absent",en_k:"アブセント",bn:"অনুপস্থিত",bn_k:"オヌポストット"},
-    {ja:"残業",yomi:"ざんぎょう",vi:"Tăng ca",vi_k:"タン・カ",id:"Lembur",id_k:"ルンブル",en:"Overtime",en_k:"オーバータイム",bn:"ওভারটাইম",bn_k:"オーバータイム"},
-    {ja:"休日",yomi:"きゅうじつ",vi:"Ngày nghỉ",vi_k:"ンガイ・ンギー",id:"Hari libur",id_k:"ハリ・リブル",en:"Day off",en_k:"デイ・オフ",bn:"ছুটির দিন",bn_k:"チュティル・ディン"},
-    {ja:"制服",yomi:"せいふく",vi:"Đồng phục",vi_k:"ドン・フック",id:"Seragam",id_k:"スラガム",en:"Uniform",en_k:"ユニフォーム",bn:"ইউনিফর্ম",bn_k:"ユニフォーム"},
-    {ja:"ロッカー",yomi:"ろっかー",vi:"Tủ khóa",vi_k:"トゥ・コア",id:"Loker",id_k:"ロカー",en:"Locker",en_k:"ロッカー",bn:"লকার",bn_k:"ロッカー"},
-    {ja:"タイムカード",yomi:"たいむかーど",vi:"Thẻ chấm công",vi_k:"テ・チャム・コン",id:"Kartu absen",id_k:"カルトゥ・アブセン",en:"Time card",en_k:"タイム・カード",bn:"টাইম কার্ড",bn_k:"タイム・カード"},
-    {ja:"報告",yomi:"ほうこく",vi:"Báo cáo",vi_k:"バオ・カオ",id:"Laporan",id_k:"ラポラン",en:"Report",en_k:"リポート",bn:"রিপোর্ট",bn_k:"リポート"},
-    {ja:"連絡",yomi:"れんらく",vi:"Liên lạc",vi_k:"リエン・ラック",id:"Kontak",id_k:"コンタック",en:"Contact",en_k:"コンタクト",bn:"যোগাযোগ",bn_k:"ヨガヨゴ"},
-    {ja:"相談",yomi:"そうだん",vi:"Tham khảo",vi_k:"タム・コー",id:"Konsultasi",id_k:"コンスルタシ",en:"Consult",en_k:"コンサルト",bn:"পরামর্শ",bn_k:"ポラモルシュ"}
-  ]},
-
-  "5S・整理整頓": { color:"#ec4899", emoji:"✨", group:"共通", items:[
-    {ja:"整理",yomi:"せいり",vi:"Sàng lọc",vi_k:"サン・ロック",id:"Pemilahan",id_k:"プミラハン",en:"Sort",en_k:"ソート",bn:"বাছাই",bn_k:"バチャイ"},
-    {ja:"整頓",yomi:"せいとん",vi:"Sắp xếp",vi_k:"サップ・セップ",id:"Penataan",id_k:"プナタアン",en:"Set in order",en_k:"セット・イン・オーダー",bn:"গোছানো",bn_k:"ゴチャノ"},
-    {ja:"清掃",yomi:"せいそう",vi:"Vệ sinh",vi_k:"ベ・シン",id:"Pembersihan",id_k:"プンブルシハン",en:"Clean",en_k:"クリーン",bn:"পরিষ্কার",bn_k:"ポリシュカール"},
-    {ja:"元の場所に戻してください",yomi:"もとのばしょにもどしてください",vi:"Hãy đặt lại chỗ cũ",vi_k:"ハイ・ダット・ライ",id:"Tolong kembalikan",id_k:"トロン・クンバリカン",en:"Please put it back",en_k:"プリーズ・プット・イット・バック",bn:"আগের জায়গায় রাখুন",bn_k:"アゲル・���ャイガイ・ラクン"},
-    {ja:"掃除してください",yomi:"そうじしてください",vi:"Hãy quét dọn",vi_k:"ハイ・クエット・ドン",id:"Tolong bersihkan",id_k:"トロン・ブルシーカン",en:"Please clean up",en_k:"プリーズ・クリーン・アップ",bn:"পরিষ্কার করুন",bn_k:"ポリシュカール・コルン"},
-    {ja:"ゴミ箱",yomi:"ごみばこ",vi:"Thùng rác",vi_k:"トゥン・ラック",id:"Tempat sampah",id_k:"トゥンパット・サンパ",en:"Trash bin",en_k:"トラッシュ・ビン",bn:"ময়লার বিন",bn_k:"モイラル・ビン"},
-    {ja:"片付けてください",yomi:"かたづけてください",vi:"Hãy dọn dẹp",vi_k:"ハイ・ドン・デップ",id:"Tolong rapikan",id_k:"トロン・ラピカン",en:"Please tidy up",en_k:"プリーズ・タイディ・アップ",bn:"গুছিয়ে রাখুন",bn_k:"グチエ・ラクン"},
-    {ja:"定位置",yomi:"ていいち",vi:"Vị trí cố định",vi_k:"ビ・チー・コ・ディン",id:"Posisi tetap",id_k:"ポシシ・テタップ",en:"Fixed position",en_k:"フィックスト・ポジション",bn:"নির্ধারিত জায়গা",bn_k:"ニルダリト・ジャイガ"}
-  ]},
-
-  "トラブル・報告": { color:"#dc2626", emoji:"🚨", group:"共通", items:[
-    {ja:"止まりました",yomi:"とまりました",vi:"Đã dừng lại",vi_k:"ダー・ズン・ライ",id:"Sudah berhenti",id_k:"スダ・ブルヘンティ",en:"It stopped",en_k:"イット・ストップト",bn:"থেমে গেছে",bn_k:"テメ・ゲチェ"},
-    {ja:"動きません",yomi:"うごきません",vi:"Không hoạt động",vi_k:"コン・ホアット・ドン",id:"Tidak bergerak",id_k:"ティダック・ブルグラック",en:"It doesn't move",en_k:"イット・ダズント・ムーブ",bn:"নড়ছে না",bn_k:"ノルচェ・ナ"},
-    {ja:"音がおかしい",yomi:"おとがおかしい",vi:"Âm thanh lạ",vi_k:"アム・タン・ラ",id:"Suaranya aneh",id_k:"スアラニャ・アネー",en:"Strange noise",en_k:"ストレンジ・ノイズ",bn:"অদ্ভুত শব্দ",bn_k:"オドブット・シャブド"},
-    {ja:"煙が出ています",yomi:"けむりがでています",vi:"Đang bốc khói",vi_k:"ダン・ボック・コイ",id:"Ada asap keluar",id_k:"アダ・アサップ",en:"Smoke is coming out",en_k:"スモーク・イズ・カミング",bn:"ধোঁয়া বেরোচ্ছে",bn_k:"ドゥオアヤ・ベロチェ"},
-    {ja:"液体が漏れています",yomi:"えきたいがもれています",vi:"Chất lỏng đang rò rỉ",vi_k:"チャット・ロン・ロ・リー",id:"Cairan bocor",id_k:"チャイラン・ボコール",en:"Liquid is leaking",en_k:"リクイッド・イズ・リーキング",bn:"তরল চুয়াচ্ছে",bn_k:"トロル・チュアチェ"},
-    {ja:"すぐ来てください",yomi:"すぐきてください",vi:"Hãy đến ngay",vi_k:"ハイ・デン・ンガイ",id:"Tolong segera datang",id_k:"トロン・スグラ・ダタン",en:"Please come right away",en_k:"プリーズ・カム・ライト・アウェイ",bn:"এখনই আসুন",bn_k:"エコノイ・アシュン"},
-    {ja:"担当者を呼んでください",yomi:"たんとうしゃをよんでください",vi:"Hãy gọi người phụ trách",vi_k:"ハイ・ゴイ・ンゴイ",id:"Tolong panggil penanggung jawab",id_k:"トロン・パンギル",en:"Please call the person in charge",en_k:"プリーズ・コール",bn:"দায়িত্বশীল ব্যক্তিকে ডাকুন",bn_k:"ダイット・ডカン"},
-    {ja:"記録してください",yomi:"きろくしてください",vi:"Hãy ghi lại",vi_k:"ハイ・ギ・ライ",id:"Tolong catat",id_k:"トロン・チャタット",en:"Please record it",en_k:"プリーズ・レコード",bn:"লিখে রাখুন",bn_k:"リখে・ラクン"},
-    {ja:"原因",yomi:"げんいん",vi:"Nguyên nhân",vi_k:"ングエン・ニャン",id:"Penyebab",id_k:"プニェバブ",en:"Cause",en_k:"コーズ",bn:"কারণ",bn_k:"カロン"},
-    {ja:"対策",yomi:"たいさく",vi:"Biện pháp",vi_k:"ビエン・ファップ",id:"Tindakan perbaikan",id_k:"ティンダカン",en:"Countermeasure",en_k:"カウンターメジャー",bn:"প্রতিকার",bn_k:"プロティカール"}
-  ]},
-
-  "工具": { color:"#84cc16", emoji:"🔧", group:"共通", items:[
-    {ja:"ハンマー",yomi:"はんまー",vi:"Búa",vi_k:"ブア",id:"Palu",id_k:"パル",en:"Hammer",en_k:"ハンマー",bn:"হাতুড়ি",bn_k:"ハトゥリ"},
-    {ja:"スパナ",yomi:"すぱな",vi:"Cờ lê",vi_k:"コ・レ",id:"Kunci pas",id_k:"クンチ・パス",en:"Wrench",en_k:"レンチ",bn:"রেঞ্চ",bn_k:"レンチ"},
-    {ja:"ドライバー",yomi:"どらいばー",vi:"Tua vít",vi_k:"トゥア・ビット",id:"Obeng",id_k:"オベン",en:"Screwdriver",en_k:"スクリュードライバー",bn:"স্ক্রু ড্রাইভার",bn_k:"スクルー・ドライバー"},
-    {ja:"メジャー",yomi:"めじゃー",vi:"Thước dây",vi_k:"トゥオック・ザイ",id:"Meteran",id_k:"メテラン",en:"Tape measure",en_k:"テープ・メジャー",bn:"মাপের ফিতা",bn_k:"マペル・フィタ"},
-    {ja:"カッター",yomi:"かったー",vi:"Dao rọc giấy",vi_k:"ダオ・ロック・���ャイ",id:"Cutter",id_k:"カッター",en:"Box cutter",en_k:"ボックス・カッター",bn:"কাটার",bn_k:"カタール"},
-    {ja:"ニッパー",yomi:"にっぱー",vi:"Kìm cắt",vi_k:"キム・カット",id:"Tang potong",id_k:"タン・ポトン",en:"Nipper",en_k:"ニッパー",bn:"নিপার",bn_k:"ニパール"},
-    {ja:"グラインダー",yomi:"ぐらいんだー",vi:"Máy mài",vi_k:"マイ・マイ",id:"Gerinda",id_k:"グリンダ",en:"Grinder",en_k:"グラインダー",bn:"গ্রাইন্ডার",bn_k:"グラインダール"},
-    {ja:"フォークリフト",yomi:"ふぉーくりふと",vi:"Xe nâng hàng",vi_k:"セー・ナン・ハン",id:"Forklift",id_k:"フォークリフト",en:"Forklift",en_k:"フォークリフト",bn:"ফর্কলিফট",bn_k:"フォークリフト"},
-    {ja:"台車",yomi:"だいしゃ",vi:"Xe đẩy",vi_k:"セー・ダイ",id:"Gerobak",id_k:"グロバック",en:"Cart / Trolley",en_k:"カート",bn:"ট্রলি",bn_k:"トロリ"}
-  ]},
-
-  /* ══════════════════════════════════
-     製造
-  ══════════════════════════════════ */
-
-  "金属・チェーン加工": { color:"#64748b", emoji:"🔩", group:"製造", items:[
-    {ja:"チェーン",yomi:"ちぇーん",vi:"Xích",vi_k:"シック",id:"Rantai",id_k:"ランタイ",en:"Chain",en_k:"チェーン",bn:"চেইন",bn_k:"チェーン"},
-    {ja:"プレス",yomi:"ぷれす",vi:"Dập",vi_k:"ダップ",id:"Press",id_k:"プレス",en:"Press",en_k:"プレス",bn:"প্রেস",bn_k:"プレス"},
-    {ja:"バリ",yomi:"ばり",vi:"Ba via",vi_k:"バ・ビア",id:"Gerinda",id_k:"グリンダ",en:"Burr",en_k:"バリ",bn:"বার্র",bn_k:"バリ"},
-    {ja:"焼き入れ",yomi:"やきいれ",vi:"Tôi cứng",vi_k:"トイ・クン",id:"Pengerasan",id_k:"プンゲラサン",en:"Heat treatment",en_k:"ヒート・トリートメント",bn:"তাপ চিকিৎসা",bn_k:"タップ"},
-    {ja:"研磨",yomi:"けんま",vi:"Mài bóng",vi_k:"マイ・ボン",id:"Penghalusan",id_k:"プンハルサン",en:"Polishing",en_k:"ポリッシング",bn:"পালিশ",bn_k:"パリシュ"},
-    {ja:"メッキ",yomi:"めっき",vi:"Mạ",vi_k:"マ",id:"Pelapisan logam",id_k:"プラピサン",en:"Plating",en_k:"プレーティング",bn:"প্লেটিং",bn_k:"プレーティング"},
-    {ja:"ピン",yomi:"ぴん",vi:"Chốt",vi_k:"チョット",id:"Pin",id_k:"ピン",en:"Pin",en_k:"ピン",bn:"পিন",bn_k:"ピン"},
-    {ja:"リンク",yomi:"りんく",vi:"Mắt xích",vi_k:"マット・シック",id:"Tautan",id_k:"タウタン",en:"Link",en_k:"リンク",bn:"লিংক",bn_k:"リンク"},
-    {ja:"組立",yomi:"くみたて",vi:"Lắp ráp",vi_k:"ラップ・ラップ",id:"Perakitan",id_k:"プラキタン",en:"Assembly",en_k:"アセンブリ",bn:"সংযোজন",bn_k:"ソンジョジョン"},
-    {ja:"油",yomi:"あぶら",vi:"Dầu",vi_k:"ザウ",id:"Minyak",id_k:"ミニャック",en:"Oil",en_k:"オイル",bn:"তেল",bn_k:"テル"},
-    {ja:"梱包",yomi:"こんぽう",vi:"Đóng gói",vi_k:"ドン・ゴイ",id:"Pengemasan",id_k:"プングマサン",en:"Packing",en_k:"パッキング",bn:"প্যাকিং",bn_k:"パッキング"}
-  ]},
-
-  "精密機械・装置": { color:"#0891b2", emoji:"🎛️", group:"製造", items:[
-    {ja:"クリーンルーム",yomi:"くりーんるーむ",vi:"Phòng sạch",vi_k:"フォン・サック",id:"Ruang bersih",id_k:"ルアン・ブルシ",en:"Clean room",en_k:"クリーン・ルーム",bn:"ক্লিন রুম",bn_k:"クリーン・ルーム"},
-    {ja:"防塵",yomi:"ぼうじん",vi:"Chống bụi",vi_k:"チョン・ブイ",id:"Anti debu",id_k:"アンティ・デブ",en:"Dustproof",en_k:"ダストプルーフ",bn:"ধুলোরোধী",bn_k:"ダストプルーフ"},
-    {ja:"静電気",yomi:"せいでんき",vi:"Tĩnh điện",vi_k:"ティン・ディエン",id:"Listrik statis",id_k:"リストリック",en:"Static electricity",en_k:"スタティック",bn:"স্থির বিদ্যুৎ",bn_k:"スタティック"},
-    {ja:"精度",yomi:"せいど",vi:"Độ chính xác",vi_k:"ドー・チン・サック",id:"Presisi",id_k:"プレシシ",en:"Precision",en_k:"プレシジョン",bn:"নির্ভুলতা",bn_k:"プレシジョン"},
-    {ja:"異物",yomi:"いぶつ",vi:"Tạp chất",vi_k:"タップ・チャット",id:"Benda asing",id_k:"ベンダ・アシン",en:"Foreign matter",en_k:"フォーリン・マター",bn:"বিদেশী পদার্থ",bn_k:"フォーリン"},
-    {ja:"トレー",yomi:"とれー",vi:"Khay",vi_k:"カイ",id:"Nampan",id_k:"ナンパン",en:"Tray",en_k:"トレー",bn:"ট্রে",bn_k:"トレー"},
-    {ja:"基板",yomi:"きばん",vi:"Bo mạch",vi_k:"ボー・マック",id:"PCB",id_k:"PCB",en:"Circuit board",en_k:"サーキット・ボード",bn:"সার্কিট বোর্ড",bn_k:"サーキット・ボード"},
-    {ja:"ネジ締め",yomi:"ねじしめ",vi:"Vặn ốc vít",vi_k:"バン・オック",id:"Kencangkan baut",id_k:"ケンチャンカン",en:"Screw tightening",en_k:"スクリュー",bn:"স্ক্রু আঁটা",bn_k:"スクリュー"},
-    {ja:"配線",yomi:"はいせん",vi:"Đấu dây",vi_k:"ダウ・ザイ",id:"Kabel",id_k:"カベル",en:"Wiring",en_k:"ワイヤリング",bn:"তারের সংযোগ",bn_k:"ワイヤリング"},
-    {ja:"エアブロー",yomi:"えあぶろー",vi:"Thổi khí",vi_k:"トイ・キー",id:"Air blow",id_k:"エア・ブロー",en:"Air blow",en_k:"エア・ブロー",bn:"এয়ার ব্লো",bn_k:"エア・ブロー"}
-  ]},
-
-  "繊維・縫製": { color:"#db2777", emoji:"🧵", group:"製造", items:[
-    {ja:"生地",yomi:"きじ",vi:"Vải",vi_k:"バイ",id:"Kain",id_k:"カイン",en:"Fabric",en_k:"ファブリック",bn:"কাপড়",bn_k:"カポール"},
-    {ja:"糸",yomi:"いと",vi:"Chỉ",vi_k:"チー",id:"Benang",id_k:"ブナン",en:"Thread",en_k:"スレッド",bn:"সুতো",bn_k:"スト"},
-    {ja:"ミシン",yomi:"みしん",vi:"Máy may",vi_k:"マイ・マイ",id:"Mesin jahit",id_k:"ムシン・ジャヒット",en:"Sewing machine",en_k:"ソーイング・マシーン",bn:"সেলাই মেশিন",bn_k:"セライ・マシン"},
-    {ja:"縫製",yomi:"ほうせい",vi:"May vá",vi_k:"マイ・バー",id:"Jahit",id_k:"ジャヒット",en:"Sewing",en_k:"ソーイング",bn:"সেলাই",bn_k:"セライ"},
-    {ja:"裁断",yomi:"さいだん",vi:"Cắt vải",vi_k:"カット・バイ",id:"Memotong kain",id_k:"ムモトン",en:"Cutting",en_k:"カッティング",bn:"কাটা",bn_k:"カタ"},
-    {ja:"検反",yomi:"けんたん",vi:"Kiểm tra vảk",vi_k:"キエム・チャ・バイ",id:"Inspeksi kain",id_k:"インスペクシ",en:"Fabric inspection",en_k:"インスペクション",bn:"কাপড় পরীক্ষা",bn_k:"カポール"},
-    {ja:"ロール",yomi:"ろーる",vi:"Cuộn vảk",vi_k:"クオン・バイ",id:"Gulungan kain",id_k:"グルンガン",en:"Roll",en_k:"ロール",bn:"রোল",bn_k:"ロール"},
-    {ja:"染色",yomi:"せんしょく",vi:"Nhuộm màu",vi_k:"ニュオム・マウ",id:"Pewarnaan",id_k:"プワルナアン",en:"Dyeing",en_k:"ダイイング",bn:"রং করা",bn_k:"ロン・コラ"},
-    {ja:"ほつれ",yomi:"ほつれ",vi:"Sổ chỉ",vi_k:"ソー・チー",id:"Serat terurai",id_k:"スラット",en:"Fraying",en_k:"フレイング",bn:"়ুতো খোলা",bn_k:"スト・コラ"},
-    {ja:"巻き取り",yomi:"まきとり",vi:"Cuốn lại",vi_k:"クオン・ライ",id:"Menggulung",id_k:"ムングルン",en:"Winding",en_k:"ワインディング",bn:"গোটানো",bn_k:"ゴタノ"},
-    {ja:"アイロン",yomi:"あいろん",vi:"Bàn là",vi_k:"バン・ラー",id:"Setrika",id_k:"ストリカ",en:"Iron",en_k:"アイアン",bn:"আয়রন",bn_k:"アイロン"}
-  ]},
-
-  /* ══════════════════════════════════
-     建設
-  ══════════════════════════════════ */
-
-  "建設・土木": { color:"#b45309", emoji:"🏗️", group:"建設", items:[
-    {ja:"足場",yomi:"あしば",vi:"Giàn giáo",vi_k:"ジャン・ジャオ",id:"Perancah",id_k:"プランチャ",en:"Scaffolding",en_k:"スキャフォールディング",bn:"মাচা",bn_k:"マチャ"},
-    {ja:"安全帯",yomi:"あんぜんたい",vi:"Dây an toàn",vi_k:"ザイ・アン・トアン",id:"Sabuk pengaman",id_k:"サブック",en:"Safety harness",en_k:"セーフティ・ハーネス",bn:"সেফটি হার্নেস",bn_k:"セーフティ"},
-    {ja:"養生",yomi:"ようじょう",vi:"Che phủ bảo vệ",vi_k:"チェ・フー",id:"Penutup pelindung",id_k:"プリンドゥン",en:"Protection",en_k:"プロテクション",bn:"সুরক্ষা আবরণ",bn_k:"スロクシャ"},
-  ]},
-
-  /* ══════════════════════════════════
-     生活・会話
-  ══════════════════════════════════ */
-
-  "日常会話・あいさつ": { color:"#8b5cf6", emoji:"💬", group:"生活・会話", items:[
-    {ja:"おはようございます",yomi:"おはようございます",vi:"Chào buổi sáng",vi_k:"チャオ・ブオイ・サン",id:"Selamat pagi",id_k:"スラマット・パギ",en:"Good morning",en_k:"グッド・モーニング",bn:"শুভ সকাল",bn_k:"シュボ・シュカル"},
-    {ja:"お疲れ様でした",yomi:"おつかれさまでした",vi:"Bạn đã vất vả rồi",vi_k:"バン・ダー・バット・バー",id:"Terima kasih sudah bekerja keras",id_k:"テリマ",en:"Good work today",en_k:"グッド・ワーク",bn:"কষ্ট করেছেন",bn_k:"コシュト・コレチェন"},
-    {ja:"よろしくお願いします",yomi:"よろしくおねがいします",vi:"Mong bạn giúp đỡ",vi_k:"モン・バン・ジュップ",id:"Mohon kerja sama",id_k:"モホン",en:"Nice to meet you / Please",en_k:"ナイス・トゥ・ミート",bn:"সহযোগিতা করবেন",bn_k:"シャホジョギタ"},
-    {ja:"ありがとうございます",yomi:"ありがとうございます",vi:"Cảm ơn bạn",vi_k:"カム・オン・バン",id:"Terima kasih",id_k:"テリマ・カシー",en:"Thank you",en_k:"サンキュー",bn:"ধন্যবাদ",bn_k:"ドンノバッド"},
-    {ja:"すみません",yomi:"すみません",vi:"Xin lỗk",vi_k:"シン・ロイ",id:"Permisi / Maaf",id_k:"プルミシ",en:"Excuse me / Sorry",en_k:"エクスキューズ・ミー",bn:"মাফ করবেন",bn_k:"マフ・コルベン"},
-    {ja:"休憩",yomi:"きゅうけい",vi:"Nghỉ giải lao",vi_k:"ンギー・ジャイ・ラオ",id:"Istirahat",id_k:"イスティラハット",en:"Break time",en_k:"ブレイク・タイム",bn:"বিরতি",bn_k:"ビロティ"},
-    {ja:"トイレ",yomi:"といれ",vi:"Nhà vệ sinh",vi_k:"ニャー・ベ・シン",id:"Toilet",id_k:"トイレット",en:"Restroom",en_k:"レストルーム",bn:"টয়লেট",bn_k:"トイレット"},
-    {ja:"食堂",yomi:"しょくどう",vi:"Nhà ăn",vi_k:"ニャー・アン",id:"Kantin",id_k:"カンティン",en:"Cafeteria",en_k:"カフェテリア",bn:"ক্যান্টিন",bn_k:"カンティン"},
-    {ja:"電話",yomi:"でんわ",vi:"Điện thoại",vi_k:"ディエン・トアイ",id:"Telepon",id_k:"テレポン",en:"Phone",en_k:"フォン",bn:"ফোন",bn_k:"フォン"},
-    {ja:"住所",yomi:"じゅうしょ",vi:"Địa chỉ",vi_k:"ディア・チー",id:"Alamat",id_k:"アラマット",en:"Address",en_k:"アドレス",bn:"ঠিকানা",bn_k:"ティカナ"},
-    {ja:"名前",yomi:"なまえ",vi:"Tên",vi_k:"テン",id:"Nama",id_k:"ナマ",en:"Name",en_k:"ネーム",bn:"নাম",bn_k:"ナム"},
-    {ja:"国籍",yomi:"こくせき",vi:"Quốc tịch",vi_k:"クオック・ティック",id:"Kewarganegaraan",id_k:"クワルガ",en:"Nationality",en_k:"ナショナリティ",bn:"জাতীয়তা",bn_k:"ジャティヨタ"}
-  ]},
-
-  "体調・病院": { color:"#f43f5e", emoji:"🏥", group:"生活・会話", items:[
-    {ja:"頭が痛い",yomi:"あたまがいたい",vi:"Đau đầu",vi_k:"ダウ・ダウ",id:"Sakit kepala",id_k:"サキット・クパラ",en:"Headache",en_k:"ヘッドエイク",bn:"মাথা ব্যথা",bn_k:"マタ・ビャタ"},
-    {ja:"お腹が痛い",yomi:"おなかがいたい",vi:"Đau bụng",vi_k:"ダウ・ブン",id:"Sakit perut",id_k:"サキット・プルット",en:"Stomachache",en_k:"ストマックエイク",bn:"পেট ব্যথা",bn_k:"ペット・ビャタ"},
-    {ja:"熱がある",yomi:"ねつがある",vi:"Có sốt",vi_k:"コ・ソット",id:"Demam",id_k:"ドゥマム",en:"Have a fever",en_k:"ハブ・ア・フィーバー",bn:"জ্বর আছে",bn_k:"ジョル・アチェ"},
-    {ja:"吐き気がする",yomi:"はきけがする",vi:"Buồn nôn",vi_k:"ブオン・ノン",id:"Mual",id_k:"ムアル",en:"Feel nauseous",en_k:"フィール・ノーシャス",bn:"বমি বমি ভাব",bn_k:"ボミ・ボミ"},
-    {ja:"めまいがする",yomi:"めまいがする",vi:"Chóng mặt",vi_k:"チョン・マット",id:"Pusing",id_k:"プシン",en:"Feel dizzy",en_k:"フィール・ディジー",bn:"মাথা ঘুরছে",bn_k:"マタ・グルチェ"},
-    {ja:"バイタル",yomi:"ばいたる",vi:"Dấu hiệu sinh tồn",vi_k:"ザウ・ヒウ",id:"Tanda vital",id_k:"タンダ・ビタル",en:"Vital signs",en_k:"バイタル・サインズ",bn:"ভাইটাল সাইন",bn_k:"バイタル"}
-  ]},
-
-  /* ══════════════════════════════════
-     生活・会話
-  ══════════════════════════════════ */
-
-  "日常会話・あいさつ": { color:"#8b5cf6", emoji:"💬", group:"生活・会話", items:[
-    {ja:"おはようございます",yomi:"おはようございます",vi:"Chào buổi sáng",vi_k:"チャオ・ブオイ・サン",id:"Selamat pagi",id_k:"スラマット・パギ",en:"Good morning",en_k:"グッド・モーニング",bn:"শুভ সকাল",bn_k:"シュボ・シュカル"},
-    {ja:"お疲れ様でした",yomi:"おつかれさまでした",vi:"Bạn đã vất vả rồi",vi_k:"バン・ダー・バット・バー",id:"Terima kasih sudah bekerja keras",id_k:"テリマ",en:"Good work today",en_k:"グッド・ワーク",bn:"কষ্ট করেছেন",bn_k:"コシュト・コレチェন"},
-    {ja:"よろしくお願いします",yomi:"よろしくおねがいします",vi:"Mong bạn giúp đỡ",vi_k:"モン・バン・ジュップ",id:"Mohon kerja sama",id_k:"モホン",en:"Nice to meet you / Please",en_k:"ナイス・トゥ・ミート",bn:"সহযোগিতা করবেন",bn_k:"シャホジョギタ"},
-    {ja:"ありがとうございます",yomi:"ありがとうございます",vi:"Cảm ơn bạn",vi_k:"カム・オン・バン",id:"Terima kasih",id_k:"テリマ・カシー",en:"Thank you",en_k:"サンキュー",bn:"ধন্যবাদ",bn_k:"ドンノバッド"},
-    {ja:"すみません",yomi:"すみません",vi:"Xin lỗk",vi_k:"シン・ロイ",id:"Permisi / Maaf",id_k:"プルミシ",en:"Excuse me / Sorry",en_k:"エクスキューズ・ミー",bn:"মাফ করবেন",bn_k:"マフ・コルベン"},
-    {ja:"休憩",yomi:"きゅうけい",vi:"Nghỉ giải lao",vi_k:"ンギー・ジャイ・ラオ",id:"Istirahat",id_k:"イスティラハット",en:"Break time",en_k:"ブレイク・タイム",bn:"বিরতি",bn_k:"ビロティ"},
-    {ja:"トイレ",yomi:"といれ",vi:"Nhà vệ sinh",vi_k:"ニャー・ベ・シン",id:"Toilet",id_k:"トイレット",en:"Restroom",en_k:"レストルーム",bn:"টয়লেট",bn_k:"トイレット"},
-    {ja:"食堂",yomi:"しょくどう",vi:"Nhà ăn",vi_k:"ニャー・アン",id:"Kantin",id_k:"カンティン",en:"Cafeteria",en_k:"カフェテリア",bn:"ক্যান্টিন",bn_k:"カンティン"},
-    {ja:"電話",yomi:"でんわ",vi:"Điện thoại",vi_k:"ディエン・トアイ",id:"Telepon",id_k:"テレポン",en:"Phone",en_k:"フォン",bn:"ফোন",bn_k:"フォン"},
-    {ja:"住所",yomi:"じゅうしょ",vi:"Địa chỉ",vi_k:"ディア・チー",id:"Alamat",id_k:"アラマット",en:"Address",en_k:"アドレス",bn:"ঠিকানা",bn_k:"ティカナ"},
-    {ja:"名前",yomi:"なまえ",vi:"Tên",vi_k:"テン",id:"Nama",id_k:"ナマ",en:"Name",en_k:"ネーム",bn:"নাম",bn_k:"ナム"},
-    {ja:"国籍",yomi:"こくせき",vi:"Quốc tịch",vi_k:"クオック・ティック",id:"Kewarganegaraan",id_k:"クワルガ",en:"Nationality",en_k:"ナショナリティ",bn:"জাতীয়তা",bn_k:"ジャティヨタ"}
-  ]},
-
-  "体調・病院": { color:"#f43f5e", emoji:"🏥", group:"生活・会話", items:[
-    {ja:"頭が痛い",yomi:"あたまがいたい",vi:"Đau đầu",vi_k:"ダウ・ダウ",id:"Sakit kepala",id_k:"サキット・クパラ",en:"Headache",en_k:"ヘッドエイク",bn:"মাথা ব্যথা",bn_k:"マタ・ビャタ"},
-    {ja:"お腹が痛い",yomi:"おなかがいたい",vi:"Đau bụng",vi_k:"ダウ・ブン",id:"Sakit perut",id_k:"サキット・プルット",en:"Stomachache",en_k:"ストマックエイク",bn:"পেট ব্যথা",bn_k:"ペット・ビャタ"},
-    {ja:"熱がある",yomi:"ねつがある",vi:"Có sốt",vi_k:"コ・ソット",id:"Demam",id_k:"ドゥマム",en:"Have a fever",en_k:"ハブ・ア・フィーバー",bn:"জ্বর আছে",bn_k:"ジョル・アチェ"},
-    {ja:"吐き気がする",yomi:"はきけがする",vi:"Buồn nôn",vi_k:"ブオン・ノン",id:"Mual",id_k:"ムアル",en:"Feel nauseous",en_k:"フィール・ノーシャス",bn:"বমি বমি ভাব",bn_k:"ボミ・ボミ"},
-    {ja:"めまいがする",yomi:"めまいがする",vi:"Chóng mặt",vi_k:"チョン・マット",id:"Pusing",id_k:"プシン",en:"Feel dizzy",en_k:"フィール・ディジー",bn:"মাথা ঘোরা",bn_k:"マタ・ゴラ"},
-    {ja:"体調が悪い",yomi:"たいちょうがわるい",vi:"Không khỏe",vi_k:"コン・コエ",id:"Tidak sehat",id_k:"ティダック・スハット",en:"I feel sick",en_k:"アイ・フィール・シック",bn:"অসুস্থ",bn_k:"オシュストー"},
-    {ja:"咳が出る",yomi:"せきがでる",vi:"Ho",vi_k:"ホー",id:"Batuk",id_k:"バトゥック",en:"Coughing",en_k:"コーフィング",bn:"কাশি",bn_k:"カシ"},
-    {ja:"病院に行く",yomi:"びょういんにいく",vi:"Đi bệnh viện",vi_k:"ディ・ベン・ビエン",id:"Pergi ke rumah sakit",id_k:"プルギ・クルマ",en:"Go to hospital",en_k:"ゴー・トゥ・ホスピタル",bn:"হাসপাতালে যাওয়া",bn_k:"ハシュパタレ・ジャওয়া"},
-    {ja:"薬",yomi:"くすり",vi:"Thuốc",vi_k:"トゥオック",id:"Obat",id_k:"オバット",en:"Medicine",en_k:"メディシン",bn:"ওষুধ",bn_k:"オシュド"},
-    {ja:"アレルギー",yomi:"あれるぎー",vi:"Dị ứng",vi_k:"ジ・ウン",id:"Alergi",id_k:"アレルギ",en:"Allergy",en_k:"アレルジー",bn:"অ্যালার্জি",bn_k:"アレルジー"},
-    {ja:"血が出ている",yomi:"ちがでている",vi:"Đang chảy máu",vi_k:"ダン・チャイ・マウ",id:"Berdarah",id_k:"ブルダラ",en:"Bleeding",en_k:"ブリーディング",bn:"রক্ত পড়ছে",bn_k:"ロクト・ポルチェ"},
-    {ja:"救急車を呼ぶ",yomi:"きゅうきゅうしゃをよぶ",vi:"Gọi xe cấp cứu",vi_k:"ゴイ・セー・カップ",id:"Panggil ambulans",id_k:"パンギル・アンブランス",en:"Call an ambulance",en_k:"コール・アン・アンビュランス",bn:"অ্যাম্বুলেন্স ডাকুন",bn_k:"アンブレンス・ダクン"},
-    {ja:"バイタル",yomi:"ばいたる",vi:"Dấu hiệu sinh tồn",vi_k:"ザウ・ヒウ",id:"Tanda vital",id_k:"タンダ・ビタル",en:"Vital signs",en_k:"バイタル・サインズ",bn:"ভাইটাল সাইন",bn_k:"バイタル"},
-    {ja:"休んでください",yomi:"やすんでください",vi:"Hãy nghỉ ngơi",vi_k:"ハイ・ンギー・ンゴイ",id:"Tolong istirahat",id_k:"トロン・イスティラハット",en:"Please rest",en_k:"プリーズ・レスト",bn:"বিশ্রাম নিন",bn_k:"ビシュラム・ニン"}
-  ]}
-
-};
-
-const LANGS = {
-  vi: { name:"ベトナム語",  flag:"🇻🇳", key:"vi",  kana:"vi_k"  },
-  id: { name:"インドネシア語", flag:"🇮🇩", key:"id",  kana:"id_k"  },
-  en: { name:"英語",       flag:"🇺🇸", key:"en",  kana:"en_k"  },
-  bn: { name:"ベンガル語", flag:"🇧🇩", key:"bn",  kana:"bn_k"  }
+  // ========== ルール・カード ==========
+  card: [
+    {
+      id: "rules_basic", cat: "rules", icon: "📋",
+      title: { ja: "基本ルール", vi: "Quy tắc cơ bản", id: "Aturan dasar", en: "Basic Rules", bn: "মৌলিক নিয়ম" },
+      items: [
+        { jp: "遅刻・欠勤は必ず事前に連絡する\n無断欠勤は厳禁", tr: { vi: "Luôn báo trước khi đi muộn hoặc vắng mặt\nNghiêm cấm vắng mặt không báo", id: "Selalu beritahu sebelum terlambat atau absen\nDilarang keras absen tanpa pemberitahuan", en: "Always notify before being late/absent\nUnexcused absence strictly prohibited", bn: "দেরি/অনুপস্থিতির আগেই সবসময় জানাবেন\nবিনা নোটিশে অনুপস্থিতি কঠোরভাবে নিষিদ্ধ" }, note: null },
+        { jp: "飲酒しての出勤・作業は禁止\n→ 即解雇の対象", tr: { vi: "Cấm đến làm việc hoặc làm việc khi say\n→ Sa thải ngay", id: "Dilarang bekerja dalam keadaan mabuk\n→ Pemecatan segera", en: "No working while drunk\n→ Immediate dismissal", bn: "মদ্যপ অবস্থায় কাজ নিষিদ্ধ\n→ তাৎক্ষণিক বরখাস্ত" }, note: null },
+        { jp: "作業中はスマホ使用禁止\n清潔感のある服装で出勤する", tr: { vi: "Cấm dùng điện thoại khi làm việc\nĐến làm việc với trang phục sạch sẽ", id: "Dilarang pakai ponsel saat bekerja\nHadir dengan pakaian bersih", en: "No smartphone during work\nCome in clean neat clothing", bn: "কাজের সময় স্মার্টফোন নিষিদ্ধ\nপরিষ্কার পোশাকে কাজে আসুন" }, note: null },
+      ]
+    },
+    {
+      id: "security", cat: "rules", icon: "🔒",
+      title: { ja: "情報・コンプライアンス", vi: "Thông tin / Tuân thủ", id: "Informasi / Kepatuhan", en: "Info / Compliance", bn: "তথ্য/কমপ্লায়েন্স" },
+      items: [
+        { jp: "職場・製品の写真をSNSに投稿しない\n→ 法的責任を問われる場合あり", tr: { vi: "Không đăng ảnh nơi làm việc/sản phẩm lên MXH\n→ Có thể bị truy cứu pháp lý", id: "Jangan posting foto tempat kerja di medsos\n→ Dapat dikenai tanggung jawab hukum", en: "Don't post workplace photos on SNS\n→ May result in legal liability", bn: "কর্মক্ষেত্রের ছবি সোশ্যাল মিডিয়ায় নয়\n→ আইনি দায় হতে পারে" }, note: null },
+        { jp: "ハラスメント・差別は絶対禁止\nパワハラ・セクハラ・いじめすべて禁止", tr: { vi: "Tuyệt đối cấm quấy rối và phân biệt đối xử", id: "Pelecehan dan diskriminasi sama sekali dilarang", en: "Harassment & discrimination absolutely prohibited", bn: "হয়রানি ও বৈষম্য সম্পূর্ণ নিষিদ্ধ" }, note: null },
+      ]
+    },
+    {
+      id: "garbage_rules", cat: "life", icon: "🗑️",
+      title: { ja: "ゴミ出しのルール", vi: "Quy tắc đổ rác", id: "Aturan buang sampah", en: "Garbage Rules", bn: "ময়লা ফেলার নিয়ম" },
+      items: [
+        { jp: "種類ごとに分ける\n燃えるゴミ・燃えないゴミ・資源ゴミ", tr: { vi: "Phân loại: cháy / không cháy / tái chế", id: "Pisahkan: mudah terbakar / tidak / daur ulang", en: "Separate: burnable / non-burnable / recyclable", bn: "আলাদা করুন: পোড়ানো যায়/যায় না/রিসাইকেল" }, note: null },
+        { jp: "収集日の朝8時までに出す\n前日の夜は出さないこと", tr: { vi: "Trước 8 giờ sáng ngày thu gom\nKhông đổ tối hôm trước", id: "Sebelum jam 8 pagi hari pengangkutan\nJangan malam sebelumnya", en: "By 8am on collection day\nNot the night before", bn: "সকাল ৮টার আগে রাখুন\nআগের রাতে রাখবেন না" }, note: null },
+      ]
+    },
+    {
+      id: "bicycle", cat: "life", icon: "🚲",
+      title: { ja: "自転車ルール（法律）", vi: "Luật xe đạp", id: "Aturan sepeda (hukum)", en: "Bicycle Laws", bn: "সাইকেল আইন" },
+      items: [
+        { jp: "飲酒運転は禁止\n（懲役5年・罰金100万円）\n2024年11月から罰則強化", tr: { vi: "Cấm lái xe khi say\n(Tù 5 năm / 1 triệu yên)\nTăng cường từ 11/2024", id: "Dilarang berkendara mabuk\n(5 tahun / 1 juta yen)\nDiperketat November 2024", en: "No drunk cycling\n(5 yrs / ¥1M fine)\nStrengthened Nov 2024", bn: "মদ্যপ সাইকেল নিষিদ্ধ\n(৫ বছর/১০ লাখ ইয়েন)\nনভেম্বর ২০২৪ থেকে কঠোর" }, note: null },
+        { jp: "スマホ・イヤホンしながら運転禁止\n（懲役6か月・罰金10万円）", tr: { vi: "Cấm dùng điện thoại/tai nghe khi đi xe\n(6 tháng / 100.000 yên)", id: "Dilarang ponsel/earphone saat berkendara\n(6 bulan / 100.000 yen)", en: "No phone/earphone while cycling\n(6 months / ¥100K)", bn: "ফোন/ইয়ারফোন সহ সাইকেল নিষিদ্ধ\n(৬ মাস/১ লাখ ইয়েন)" }, note: null },
+        { jp: "夜間はライトを点灯\nヘルメット着用（努力義務）", tr: { vi: "Bật đèn ban đêm\nĐội mũ bảo hiểm (nỗ lực)", id: "Nyalakan lampu malam\nPakai helm (upaya)", en: "Lights on at night\nWear helmet (effort)", bn: "রাতে লাইট জ্বালুন\nহেলমেট পরুন (প্রচেষ্টা)" }, note: null },
+      ]
+    },
+    {
+      id: "noise", cat: "life", icon: "🔊",
+      title: { ja: "近隣マナー", vi: "Phép lịch sự với hàng xóm", id: "Tata krama bertetangga", en: "Neighbor Manners", bn: "প্রতিবেশী আচরণ" },
+      items: [
+        { jp: "夜10時以降は静かにする\n音楽・テレビ・会話の音量を下げる", tr: { vi: "Yên lặng sau 10 giờ tối\nGiảm âm lượng nhạc, TV, tiếng nói", id: "Tenang setelah jam 10\nKecilkan volume musik, TV", en: "Quiet after 10pm\nLower music, TV, conversation", bn: "রাত ১০টার পর চুপ\nসঙ্গীত/টিভি কমান" }, note: null },
+      ]
+    },
+    {
+      id: "custom", cat: "custom", icon: "⚙️",
+      title: { ja: "会社・現場のルール（カスタム）", vi: "Nội quy công ty / hiện trường", id: "Aturan perusahaan / lokasi", en: "Company / Site Rules", bn: "কোম্পানি/সাইটের নিয়ম" },
+      items: [
+        { jp: "御社のルールをここに追加できます\nお問い合わせ：トクシントラスト 羽根\n080-8374-1036", tr: { vi: "Có thể thêm nội quy công ty vào đây\nLiên hệ: Tokushin Trust - Hane\n080-8374-1036", id: "Peraturan perusahaan dapat ditambahkan\nHubungi: Tokushin Trust - Hane\n080-8374-1036", en: "Your company rules can be added here\nContact: Tokushin Trust - Hane\n080-8374-1036", bn: "কোম্পানির নিয়ম যোগ করা যাবে\nযোগাযোগ: Tokushin Trust - Hane\n080-8374-1036" }, note: null },
+      ]
+    },
+  ]
 };
